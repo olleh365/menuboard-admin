@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'waiting_screen.dart';
+import 'kitchen_screen.dart';
+import 'serving_screen.dart';
+import 'status_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -81,6 +85,15 @@ class MyApp extends StatelessWidget {
             ),
           ],
         ),
+          body: const TabBarView(
+            physics: NeverScrollableScrollPhysics(),
+              children: [
+                WaitingScreen(),
+                KitchenScreen(),
+                ServingScreen(),
+                StatusScreen()
+              ]
+          ),
       ),
       )
     );
