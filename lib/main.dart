@@ -8,7 +8,7 @@ import 'status_screen.dart';
 void main() {
   runApp(const MyApp());
 }
-
+// 임시 토스트 팝업 삭제해야함.
 void toastExample(){
   Fluttertoast.showToast(
     msg: "새로고침 되었습니다.",
@@ -24,7 +24,6 @@ void toastExample(){
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -33,6 +32,7 @@ class MyApp extends StatelessWidget {
         child : Scaffold(
           appBar: AppBar(
             title: const Padding(
+              // 로고 부분 UI
               padding: EdgeInsets.symmetric(horizontal: 0.0),
               child: SizedBox(
                 width: 100,
@@ -56,13 +56,14 @@ class MyApp extends StatelessWidget {
             ),
           ),
           backgroundColor: Colors.white,
+          // 탭바 UI
           bottom:  const TabBar(tabs: [Tab(text: '대기'),Tab(text: '주방'),Tab(text: '서빙'),Tab(text: '현황')],
           indicatorColor: Color(0xFFFF662B),
           indicatorSize: TabBarIndicatorSize.tab,
           labelColor: Color(0xFFFF662B),
           unselectedLabelColor: Color(0xFF989898),
           splashFactory: NoSplash.splashFactory),
-          //새로 고침 버튼
+          // 새로 고침 버튼
           actions: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
