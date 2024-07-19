@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
       home: DefaultTabController(
         length: 4,
         child : Scaffold(
+          backgroundColor: const Color(0xFFF5F5F5),
           appBar: AppBar(
             title: const Padding(
               // 로고 부분 UI
@@ -96,7 +97,7 @@ class MyApp extends StatelessWidget {
               ]
           ),
       ),
-      )
+      ),
     );
   }
 }
