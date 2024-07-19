@@ -40,7 +40,6 @@ class WaitingScreen extends StatelessWidget {
           ),
         ],
       ),
-      // 더 많은 주문을 추가할 수 있습니다
     ];
 
     return ListView.builder(
@@ -55,7 +54,6 @@ class WaitingScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     order.orderNumber,
@@ -65,20 +63,23 @@ class WaitingScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '($formattedTime)',
+                    ' ($formattedTime)',
                     style: const TextStyle(
                       fontSize: 13,
                       color: Colors.grey,
                     ),
                   ),
                   Text(
-                    '| 테이블 ${order.tableNumber}',
+                    ' | 테이블 ${order.tableNumber}',
                     style: const TextStyle(
                       fontSize: 13,
                       color: Colors.grey,
                     ),
                   ),
                 ],
+              ),
+              const Divider(
+                color: Color(0xFFF5F5F5),
               ),
               ...order.items.map((item) =>
                   Column(
@@ -94,8 +95,8 @@ class WaitingScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '추가 메뉴: ${item.additionalMenu.map((
-                            addItem) => addItem.name).join(', ')}',
+                        '${item.additionalMenu.map((
+                            addItem) => addItem.name).join(', ')} 추가',
                         style: const TextStyle(
                           fontSize: 13,
                           color: Colors.grey,
@@ -104,7 +105,6 @@ class WaitingScreen extends StatelessWidget {
                     ],
                   )),
               const SizedBox(height: 8),
-              const Divider(),
             ],
           ),
         );
