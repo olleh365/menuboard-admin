@@ -38,7 +38,6 @@ class MyApp extends StatelessWidget {
               child: SizedBox(
                 width: 100,
                 height: 24,
-                // alignment: Alignment.center,\
                 child: Row(
                   children: [
                     Text(

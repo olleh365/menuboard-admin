@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'exam_menu_model.dart';
 import 'package:intl/intl.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'main.dart';
 
 class WaitingScreen extends StatelessWidget {
@@ -18,6 +17,15 @@ class WaitingScreen extends StatelessWidget {
         items: [
           OrderItem(
             mainMenu: '메인 메뉴 1',
+            mainMenuPrice: 10.0,
+            additionalMenu: [
+              AdditionalMenuItem(name: '추가 메뉴 1', price: 2.0),
+              AdditionalMenuItem(name: '추가 메뉴 2', price: 3.0),
+            ],
+            quantity: 2,
+          ),
+          OrderItem(
+            mainMenu: '메인 메뉴 3',
             mainMenuPrice: 10.0,
             additionalMenu: [
               AdditionalMenuItem(name: '추가 메뉴 1', price: 2.0),
@@ -91,10 +99,22 @@ class WaitingScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(
+                        SizedBox(
+                          width: 61,
+                          height: 24,
                             child: TextButton(
                               onPressed: toastExample,
-                              child: Text('주문승인')
+                              style: TextButton.styleFrom(
+                                  backgroundColor: const Color(0xFFFF662B),
+                                  foregroundColor: Colors.white,
+                                padding: EdgeInsets.zero,
+                              ),
+                                child: const Text(
+                                  '주문승인',
+                                  style: TextStyle(
+                                    fontSize: 12, fontWeight: FontWeight.w600
+                                  ),
+                              )
                             )
                         )
                       ],
@@ -106,31 +126,51 @@ class WaitingScreen extends StatelessWidget {
                   ...order.items.map((item) =>
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const SizedBox(height: 8),
-                          Text(
-                            '${item.mainMenu}, ${item.quantity}개',
-                            style: const TextStyle(
-                                fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.black
-                            ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 8),
+                              Text(
+                                '${item.mainMenu}, ${item.quantity}개',
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black
+                                ),
+                              ),
+                              Text(
+                                '${item.additionalMenu.map((
+                                    addItem) => addItem.name).join(', ')} 추가',
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFF777777),
+                                ),
+                              ),
+                              const SizedBox(height: 8,)
+                            ],
                           ),
-                          Text(
-                            '${item.additionalMenu.map((
-                                addItem) => addItem.name).join(', ')} 추가',
-                            style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xFF777777),
+                          SizedBox(
+                            width: 37,
+                            height: 24,
+                            child: TextButton(onPressed: toastExample,
+                                style: TextButton.styleFrom(
+                                  backgroundColor: const Color(0xFFF5F5F5),
+                                  foregroundColor: Colors.black,
+                                  padding: EdgeInsets.zero
+                                ),
+                                child: const Text('취소',
+                                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12
+                                  ),
+                                )
                             ),
-                          ),
+                          )
                         ],
-                    ),
+                        ),
                       )),
-                  const SizedBox(height: 8),
                 ],
               ),
             ),
