@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:menuboard_admin/order_provider.dart';
+import 'package:provider/provider.dart';
 import 'waiting_screen.dart';
 import 'kitchen_screen.dart';
 import 'serving_screen.dart';
 import 'status_screen.dart';
+import 'order_provider.dart';
+
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => OrderProvider(),
+      child: const MyApp(),
+    )
+  );
 }
 // 임시 토스트 팝업 삭제해야함.
 void toastExample(){

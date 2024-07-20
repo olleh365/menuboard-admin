@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'exam_menu_model.dart';
+import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'main.dart';
+import 'order_provider.dart';
 
 class WaitingScreen extends StatelessWidget {
   const WaitingScreen({super.key});
@@ -9,49 +10,7 @@ class WaitingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // 임시 주문 데이터
-    final List<Order> orders = [
-      Order(
-        orderNumber: '001',
-        orderTime: DateTime.now(),
-        tableNumber: 5,
-        items: [
-          OrderItem(
-            mainMenu: '메인 메뉴 1',
-            mainMenuPrice: 10.0,
-            additionalMenu: [
-              AdditionalMenuItem(name: '추가 메뉴 1', price: 2.0),
-              AdditionalMenuItem(name: '추가 메뉴 2', price: 3.0),
-            ],
-            quantity: 2,
-          ),
-          OrderItem(
-            mainMenu: '메인 메뉴 3',
-            mainMenuPrice: 10.0,
-            additionalMenu: [
-              AdditionalMenuItem(name: '추가 메뉴 1', price: 2.0),
-              AdditionalMenuItem(name: '추가 메뉴 2', price: 3.0),
-            ],
-            quantity: 2,
-          ),
-        ],
-      ),
-      Order(
-        orderNumber: '002',
-        orderTime: DateTime.now(),
-        tableNumber: 3,
-        items: [
-          OrderItem(
-            mainMenu: '메인 메뉴 2',
-            mainMenuPrice: 12.0,
-            additionalMenu: [
-              AdditionalMenuItem(name: '추가 메뉴 3', price: 1.5),
-            ],
-            quantity: 1,
-          ),
-        ],
-      ),
-    ];
-
+    final orders = Provider.of<OrderProvider>(context).orders;
     return ListView.builder(
       itemCount: orders.length,
       itemBuilder: (context, index) {
