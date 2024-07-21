@@ -10,19 +10,19 @@ class OrderProvider extends ChangeNotifier {
       items: [
         OrderItem(
           mainMenu: '메인 메뉴 1',
-          mainMenuPrice: 10.0,
+          mainMenuPrice: 12000,
           additionalMenu: [
-            AdditionalMenuItem(name: '추가 메뉴 1', price: 2.0),
-            AdditionalMenuItem(name: '추가 메뉴 2', price: 3.0),
+            AdditionalMenuItem(name: '추가 메뉴 1', price: 1000),
+            AdditionalMenuItem(name: '추가 메뉴 2', price: 2000),
           ],
           quantity: 2,
         ),
         OrderItem(
           mainMenu: '메인 메뉴 3',
-          mainMenuPrice: 10.0,
+          mainMenuPrice: 14000,
           additionalMenu: [
-            AdditionalMenuItem(name: '추가 메뉴 1', price: 2.0),
-            AdditionalMenuItem(name: '추가 메뉴 2', price: 3.0),
+            AdditionalMenuItem(name: '추가 메뉴 1', price: 2000),
+            AdditionalMenuItem(name: '추가 메뉴 2', price: 3000),
           ],
           quantity: 2,
         ),
@@ -35,9 +35,9 @@ class OrderProvider extends ChangeNotifier {
       items: [
         OrderItem(
           mainMenu: '메인 메뉴 2',
-          mainMenuPrice: 12.0,
+          mainMenuPrice: 12000,
           additionalMenu: [
-            AdditionalMenuItem(name: '추가 메뉴 3', price: 1.5),
+            AdditionalMenuItem(name: '추가 메뉴 3', price: 4000),
           ],
           quantity: 1,
         ),

@@ -17,7 +17,7 @@ class Order {
 
 class OrderItem {
   final String mainMenu;
-  final double mainMenuPrice;
+  final int mainMenuPrice;
   final List<AdditionalMenuItem> additionalMenu;
   final int quantity;
 
@@ -36,7 +36,7 @@ class OrderItem {
 
 class AdditionalMenuItem {
   final String name;
-  final double price;
+  final int price;
 
   AdditionalMenuItem({
     required this.name,

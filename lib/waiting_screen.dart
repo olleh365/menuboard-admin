@@ -15,7 +15,7 @@ class WaitingScreen extends StatelessWidget {
     final cencelMenu = '메인 메뉴: ${item.mainMenu}\n'
         '수량: ${item.quantity}\n'
         '추가 메뉴: $additionalMenu\n'
-        '총 가격: \$${item.totalPrice.toStringAsFixed(2)}';
+        '총 가격: ${item.totalPrice.toStringAsFixed(0)}원';
 
     showDialog(context: context,
         barrierDismissible: false,
