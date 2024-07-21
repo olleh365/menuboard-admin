@@ -6,7 +6,6 @@ import 'waiting_screen.dart';
 import 'kitchen_screen.dart';
 import 'serving_screen.dart';
 import 'status_screen.dart';
-import 'order_provider.dart';
 
 
 void main() {

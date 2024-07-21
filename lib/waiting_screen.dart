@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:menuboard_admin/exam_menu_model.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'main.dart';
@@ -6,6 +7,29 @@ import 'order_provider.dart';
 
 class WaitingScreen extends StatelessWidget {
   const WaitingScreen({super.key});
+
+  void cancelWindow(BuildContext context, OrderItem item){
+    final additionalMenu = item.additionalMenu
+        .map((addItem) => addItem.name)
+        .join(', ');
+    final cencelMenu = '메인 메뉴: ${item.mainMenu}\n'
+        '수량: ${item.quantity}\n'
+        '추가 메뉴: $additionalMenu\n'
+        '총 가격: \$${item.totalPrice.toStringAsFixed(2)}';
+
+    showDialog(context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context){
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            title: const Text('주문 취소', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+            content: Text(cencelMenu),
+          );
+        }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +139,10 @@ class WaitingScreen extends StatelessWidget {
                           SizedBox(
                             width: 37,
                             height: 24,
-                            child: TextButton(onPressed: toastExample,
+                            child: TextButton(
+                                onPressed:() {
+                                  cancelWindow(context, item);
+                                },
                                 style: TextButton.styleFrom(
                                   backgroundColor: const Color(0xFFF5F5F5),
                                   foregroundColor: Colors.black,
