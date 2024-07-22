@@ -12,10 +12,8 @@ class WaitingScreen extends StatelessWidget {
     final additionalMenu = item.additionalMenu
         .map((addItem) => addItem.name)
         .join(', ');
-    final cencelMenu = '메인 메뉴: ${item.mainMenu}\n'
-        '수량: ${item.quantity}\n'
-        '추가 메뉴: $additionalMenu\n'
-        '총 가격: ${item.totalPrice.toStringAsFixed(0)}원';
+    final cencelMenu = '[${item.mainMenu}/$additionalMenu ${item.quantity}개 ${item.totalPrice.toStringAsFixed(0)}원]\n'
+    '해당 주문을 취소하시겠습니까?';
 
     showDialog(context: context,
         barrierDismissible: false,
@@ -24,8 +22,24 @@ class WaitingScreen extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            title: const Text('주문 취소', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-            content: Text(cencelMenu),
+            title: const Text('주문 취소', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),textAlign: TextAlign.center),
+            content: Text(cencelMenu, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF777777)) ,textAlign: TextAlign.center),
+            actions: <Widget>[
+              TextButton(onPressed:() {Navigator.of(context).pop();},
+          style: TextButton.styleFrom(
+            backgroundColor: const Color(0xFFF5F5F5),
+            minimumSize: const Size(136, 48),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))
+          )
+          ,child: const Text('취소', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black))),
+              TextButton(onPressed:() {Navigator.of(context).pop();},
+                  style: TextButton.styleFrom(
+                    backgroundColor: const Color(0xFFFF662B),
+                    minimumSize: const Size(136, 48),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))
+                  ),
+          child: const Text('확인', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),))
+            ],
           );
         }
     );
@@ -55,6 +69,7 @@ class WaitingScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
+                          //
                           children: [
                             Text(
                               order.orderNumber,
