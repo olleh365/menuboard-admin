@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:menuboard_admin/exam_menu_model.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 import 'main.dart';
 import 'order_provider.dart';
 
-class KitchenScreen extends StatelessWidget {
+class KitchenScreen extends StatefulWidget {
   const KitchenScreen({super.key});
+
+  @override
+  KitchenScreenState createState() => KitchenScreenState();
+}
+
+class KitchenScreenState extends State<KitchenScreen> {
+  bool isChecked = false;
+
   @override
   Widget build(BuildContext context) {
     final orders = Provider.of<OrderProvider>(context).orders;
@@ -24,7 +31,7 @@ class KitchenScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -51,6 +58,14 @@ class KitchenScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 16)
                               ],
+                            ),
+                            Checkbox(
+                              value: isChecked,
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  isChecked = value!;
+                                });
+                              },
                             ),
                           ],
                         ),
