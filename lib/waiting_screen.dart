@@ -14,7 +14,7 @@ class WaitingScreen extends StatelessWidget {
         .join(', ');
     final cencelMenu = '[${item.mainMenu}/$additionalMenu ${item.quantity}개 ${item.totalPrice.toStringAsFixed(0)}원]\n'
     '해당 주문을 취소하시겠습니까?';
-
+    // 취소 시 팝업창 빌드
     showDialog(context: context,
         barrierDismissible: false,
         builder: (BuildContext context){
@@ -24,6 +24,7 @@ class WaitingScreen extends StatelessWidget {
             ),
             title: const Text('주문 취소', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),textAlign: TextAlign.center),
             content: Text(cencelMenu, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Color(0xFF777777)) ,textAlign: TextAlign.center),
+            // 하단 '취소', '확인' 버튼
             actions: <Widget>[
               TextButton(onPressed:() {Navigator.of(context).pop();},
           style: TextButton.styleFrom(
@@ -47,7 +48,6 @@ class WaitingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 임시 주문 데이터
     final orders = Provider.of<OrderProvider>(context).orders;
     return ListView.builder(
       itemCount: orders.length,
