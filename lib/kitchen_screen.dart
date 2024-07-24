@@ -67,6 +67,11 @@ class KitchenScreenState extends State<KitchenScreen> {
                                   _checkedItems[index] = value ?? false;
                                 });
                               },
+                              activeColor: const Color(0xFFAAAAAA),
+                              side: const BorderSide(
+                                color: Color(0xFFDFDFDF),
+                                width: 2,
+                              ),
                             ),
                           ],
                         ),

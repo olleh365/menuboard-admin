@@ -151,6 +151,8 @@ class WaitingScreen extends StatelessWidget {
                               const SizedBox(height: 8,)
                             ],
                           ),
+
+                          // 취소 버튼 UI
                           SizedBox(
                             width: 37,
                             height: 24,
