@@ -12,7 +12,7 @@ class KitchenScreen extends StatefulWidget {
 }
 
 class KitchenScreenState extends State<KitchenScreen> {
-  bool isChecked = false;
+  final Map<int, bool> _checkedItems = {};
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +23,7 @@ class KitchenScreenState extends State<KitchenScreen> {
       itemCount: orderItems.length,
       itemBuilder: (context, index) {
         final orderItem = orderItems[index];
+        final isChecked = _checkedItems[index]??false;
         return Column(
           children: [
             if (index == 0) const SizedBox(height: 8),
@@ -63,7 +64,7 @@ class KitchenScreenState extends State<KitchenScreen> {
                               value: isChecked,
                               onChanged: (bool? value) {
                                 setState(() {
-                                  isChecked = value!;
+                                  _checkedItems[index] = value ?? false;
                                 });
                               },
                             ),
