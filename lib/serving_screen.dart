@@ -13,16 +13,15 @@ class ServingScreen extends StatefulWidget {
 }
 
 class ServingScreenState extends State<ServingScreen>{
-  final Map<int, bool> _checkedItems = {};
+  final Map<int, Map<int, bool>> _checkedItems = {};
 
   @override
   Widget build(BuildContext context) {
     final orders = Provider.of<OrderProvider>(context).orders;
     return ListView.builder(
       itemCount: orders.length,
-      itemBuilder: (context, index) {
-        final order = orders[index];
-        final isChecked = _checkedItems[index]??false;
+      itemBuilder: (context, orderIndex) {
+        final order = orders[orderIndex];
         final formattedTime = DateFormat('HH:mm').format(order.orderTime);
         return Column(
           children: [
@@ -71,7 +70,14 @@ class ServingScreenState extends State<ServingScreen>{
                             width: 61,
                             height: 24,
                             child: TextButton(
-                                onPressed: toastExample,
+                                onPressed: (){
+                                  setState(() {
+                                    final allChecked = _checkedItems[orderIndex]?.values.every((checked) => checked) ?? false;
+                                    _checkedItems[orderIndex] = Map.fromEntries(
+                                      order.items.map((item) => MapEntry(order.items.indexOf(item), !allChecked)),
+                                    );
+                                  });
+                                },
                                 style: TextButton.styleFrom(
                                   backgroundColor: const Color(0xFFFF662B),
                                   foregroundColor: Colors.white,
@@ -91,52 +97,59 @@ class ServingScreenState extends State<ServingScreen>{
                   const Divider(
                     color: Color(0xFFF5F5F5),
                   ),
-                  ...order.items.map((item) =>
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 8),
-                                Text(
-                                  '${item.mainMenu}, ${item.quantity}개',
-                                  style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.black
-                                  ),
+                  ...order.items.map((item) {
+                    final itemIndex = order.items.indexOf(item);
+                    final isChecked = _checkedItems[orderIndex]?[itemIndex] ?? false;
+
+                    return
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 8),
+                              Text(
+                                '${item.mainMenu}, ${item.quantity}개',
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black
                                 ),
-                                Text(
-                                  '${item.additionalMenu.map((
-                                      addItem) => addItem.name).join(', ')} 추가',
-                                  style: const TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xFF777777),
-                                  ),
-                                ),
-                                const SizedBox(height: 8,)
-                              ],
-                            ),
-                            Checkbox(
-                              value: isChecked,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  _checkedItems[index] = value ?? false;
-                                });
-                              },
-                              activeColor: const Color(0xFFFF662B),
-                              side: const BorderSide(
-                                color: Color(0xFFDFDFDF),
-                                width: 2,
                               ),
+                              Text(
+                                '${item.additionalMenu.map((addItem) =>
+                                addItem.name).join(', ')} 추가',
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFF777777),
+                                ),
+                              ),
+                              const SizedBox(height: 8,)
+                            ],
+                          ),
+                          Checkbox(
+                            value: isChecked,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                _checkedItems[orderIndex] ??= {};
+                                _checkedItems[orderIndex]![itemIndex] = value ?? false;
+                              });
+                            },
+                            activeColor: const Color(0xFFFF662B),
+                            side: const BorderSide(
+                              color: Color(0xFFDFDFDF),
+                              width: 2,
                             ),
-                          ],
-                        ),
-                      )),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  ),
                 ],
               ),
             ),
