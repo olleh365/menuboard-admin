@@ -26,6 +26,43 @@ class OrderProvider extends ChangeNotifier {
           ],
           quantity: 2,
         ),
+        OrderItem(
+          mainMenu: '탕후루',
+          mainMenuPrice: 2000,
+          additionalMenu: [
+            AdditionalMenuItem(name: '귤', price: 1000),
+            AdditionalMenuItem(name: '포도', price: 1000),
+          ],
+          quantity: 2,
+        ),
+        OrderItem(
+          mainMenu: '탕후루',
+          mainMenuPrice: 2000,
+          additionalMenu: [
+            AdditionalMenuItem(name: '귤', price: 1000),
+            AdditionalMenuItem(name: '포도', price: 1000),
+          ],
+          quantity: 2,
+        ),
+        OrderItem(
+          mainMenu: '탕후루',
+          mainMenuPrice: 2000,
+          additionalMenu: [
+            AdditionalMenuItem(name: '귤', price: 1000),
+            AdditionalMenuItem(name: '포도', price: 1000),
+          ],
+          quantity: 2,
+        ),
+        OrderItem(
+          mainMenu: '탕후루',
+          mainMenuPrice: 2000,
+          additionalMenu: [
+            AdditionalMenuItem(name: '귤', price: 1000),
+            AdditionalMenuItem(name: '포도', price: 1000),
+          ],
+          quantity: 2,
+        ),
+
       ],
     ),
     Order(

@@ -9,10 +9,11 @@ class WaitingScreen extends StatelessWidget {
   const WaitingScreen({super.key});
 
   void cancelWindow(BuildContext context, OrderItem item){
+    var f = NumberFormat('###,###,###,###');
     final additionalMenu = item.additionalMenu
         .map((addItem) => addItem.name)
         .join(', ');
-    final cencelMenu = '[${item.mainMenu}/$additionalMenu ${item.quantity}개 ${item.totalPrice.toStringAsFixed(0)}원]\n'
+    final cencelMenu = '[${item.mainMenu}/$additionalMenu ${item.quantity}개 ${f.format(item.totalPrice)}원]\n'
     '해당 주문을 취소하시겠습니까?';
     // 취소 시 팝업창 빌드
     showDialog(context: context,
