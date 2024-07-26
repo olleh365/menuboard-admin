@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:menuboard_admin/exam_menu_model.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'main.dart';
 import 'order_provider.dart';
 
 class ServingScreen extends StatefulWidget {
@@ -20,8 +18,8 @@ class ServingScreenState extends State<ServingScreen>{
     final orders = Provider.of<OrderProvider>(context).orders;
     return ListView.builder(
       itemCount: orders.length,
-      itemBuilder: (context, orderIndex) {
-        final order = orders[orderIndex];
+      itemBuilder: (context, index) {
+        final order = orders[index];
         final formattedTime = DateFormat('HH:mm').format(order.orderTime);
         return Column(
           children: [
@@ -72,8 +70,8 @@ class ServingScreenState extends State<ServingScreen>{
                             child: TextButton(
                                 onPressed: (){
                                   setState(() {
-                                    final allChecked = _checkedItems[orderIndex]?.values.every((checked) => checked) ?? false;
-                                    _checkedItems[orderIndex] = Map.fromEntries(
+                                    final allChecked = _checkedItems[index]?.values.every((checked) => checked) ?? false;
+                                    _checkedItems[index] = Map.fromEntries(
                                       order.items.map((item) => MapEntry(order.items.indexOf(item), !allChecked)),
                                     );
                                   });
@@ -99,7 +97,7 @@ class ServingScreenState extends State<ServingScreen>{
                   ),
                   ...order.items.map((item) {
                     final itemIndex = order.items.indexOf(item);
-                    final isChecked = _checkedItems[orderIndex]?[itemIndex] ?? false;
+                    final isChecked = _checkedItems[index]?[itemIndex] ?? false;
 
                     return
                     Padding(
@@ -135,8 +133,8 @@ class ServingScreenState extends State<ServingScreen>{
                             value: isChecked,
                             onChanged: (bool? value) {
                               setState(() {
-                                _checkedItems[orderIndex] ??= {};
-                                _checkedItems[orderIndex]![itemIndex] = value ?? false;
+                                _checkedItems[index] ??= {};
+                                _checkedItems[index]![itemIndex] = value ?? false;
                               });
                             },
                             activeColor: const Color(0xFFFF662B),
