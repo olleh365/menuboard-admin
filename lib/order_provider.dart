@@ -84,4 +84,12 @@ class OrderProvider extends ChangeNotifier {
   ];
 
   List<Order> get orders => _orders;
+  final List<Order> approvedOrders = [];
+
+
+  void approveOrder(Order order) {
+    approvedOrders.add(order);
+    _orders.remove(order);
+    notifyListeners();
+  }
 }

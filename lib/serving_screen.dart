@@ -15,7 +15,7 @@ class ServingScreenState extends State<ServingScreen>{
 
   @override
   Widget build(BuildContext context) {
-    final orders = Provider.of<OrderProvider>(context).orders;
+    final orders = Provider.of<OrderProvider>(context).approvedOrders;
     return ListView.builder(
       itemCount: orders.length,
       itemBuilder: (context, index) {

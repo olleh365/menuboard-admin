@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'main.dart';
 import 'order_provider.dart';
+import 'serving_screen.dart';
 
 class WaitingScreen extends StatelessWidget {
   const WaitingScreen({super.key});
@@ -102,7 +103,9 @@ class WaitingScreen extends StatelessWidget {
                           width: 61,
                           height: 24,
                             child: TextButton(
-                              onPressed: toastExample,
+                              onPressed: () {
+                                Provider.of<OrderProvider>(context, listen: false).approveOrder(order);
+                              },
                               style: TextButton.styleFrom(
                                   backgroundColor: const Color(0xFFFF662B),
                                   foregroundColor: Colors.white,

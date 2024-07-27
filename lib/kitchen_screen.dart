@@ -14,7 +14,7 @@ class KitchenScreenState extends State<KitchenScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final orders = Provider.of<OrderProvider>(context).orders;
+    final orders = Provider.of<OrderProvider>(context).approvedOrders;
     final orderItems = orders.expand((order) => order.items).toList();
 
     return ListView.builder(

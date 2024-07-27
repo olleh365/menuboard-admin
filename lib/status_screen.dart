@@ -29,7 +29,8 @@ var f = NumberFormat('###,###,###,###');
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 8.0,
-        childAspectRatio: 1.8 / 1.5,
+        mainAxisSpacing: 8.0,
+        childAspectRatio: 1.9 / 1.5,
       ),
 
       itemCount: tableOrders.length,
@@ -49,7 +50,7 @@ var f = NumberFormat('###,###,###,###');
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 8,),
+                  const SizedBox(height: 8),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Row(
