@@ -17,7 +17,7 @@ var f = NumberFormat('###,###,###,###');
 
   @override
   Widget build(BuildContext context) {
-    final orders = Provider.of<OrderProvider>(context).orders;
+    final orders = Provider.of<OrderProvider>(context).approvedOrders;
     // 테이블 번호와 Order 매핑
     final tableOrders = {
       for (var i = 1; i <= 8; i++)
@@ -39,7 +39,9 @@ var f = NumberFormat('###,###,###,###');
         final order = tableOrders[tableNumber];
         final totalPrice = order?.items.fold(0.0, (sum, item) => sum + item.totalPrice);
         final otherQuantity = order!.items.length >= 4 ? order.items.length -3 : 0;
-        return Column(
+        return GestureDetector(
+          onTap: () => tableDialog(context, tableNumber, order),
+          child: Column(
           children: [
             Container(
               height: 152,
@@ -146,8 +148,72 @@ var f = NumberFormat('###,###,###,###');
               ),
             ),
           ],
+        ),
         );
       },
+    );
+  }
+// 테이블 팝업 화면
+  void tableDialog(BuildContext context, int tableNumber, Order order) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+              contentPadding: EdgeInsets.zero,
+              content: SizedBox(
+                height: 800,
+                width: 600,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '테이블 $tableNumber',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700,
+                        color: order.items.isEmpty ? const Color(0xFF777777): const Color(0xFFFF662B),),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              const Divider( // 구분선 추가
+                color: Color(0xFFF5F5F5),
+                height: 1,
+                thickness: 1,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: ListView(
+                    children: order.items
+                        .map((item) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Text(
+                        '${item.mainMenu}, ${item.quantity}개',
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                      ),
+                    ))
+                        .toList(),
+                  ),
+                ),
+              ),
+            ],
+            ),
+            )
+          );
+        }
     );
   }
 }
