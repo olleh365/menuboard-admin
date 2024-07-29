@@ -12,7 +12,7 @@ class StatusScreen extends StatefulWidget {
   StatusScreenState createState() => StatusScreenState();
 }
 
-class StatusScreenState extends State<StatusScreen>{
+class StatusScreenState extends State<StatusScreen> {
   var f = NumberFormat('###,###,###,###');
 
   @override
@@ -22,8 +22,14 @@ class StatusScreenState extends State<StatusScreen>{
     final tableOrders = {
       for (var i = 1; i <= 8; i++)
         i: orders.firstWhere((order) => order.tableNumber == i,
-            orElse: () => Order(orderNumber: '', orderTime: DateTime.now(), tableNumber: i, items: []))};
+            orElse: () => Order(
+                orderNumber: '',
+                orderTime: DateTime.now(),
+                tableNumber: i,
+                items: []))
+    };
 
+    // 테이블 영역 카드 UI
     return GridView.builder(
       padding: const EdgeInsets.all(8.0),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -32,13 +38,14 @@ class StatusScreenState extends State<StatusScreen>{
         mainAxisSpacing: 8.0,
         childAspectRatio: 1.9 / 1.5,
       ),
-
       itemCount: tableOrders.length,
       itemBuilder: (context, index) {
         final tableNumber = index + 1;
         final order = tableOrders[tableNumber];
-        final totalPrice = order?.items.fold(0.0, (sum, item) => sum + item.totalPrice);
-        final otherQuantity = order!.items.length >= 4 ? order.items.length -3 : 0;
+        final totalPrice =
+            order?.items.fold(0.0, (sum, item) => sum + item.totalPrice);
+        final otherQuantity =
+            order!.items.length >= 4 ? order.items.length - 3 : 0;
         return GestureDetector(
           onTap: () => tableDialog(context, tableNumber, order),
           child: Column(
@@ -47,8 +54,7 @@ class StatusScreenState extends State<StatusScreen>{
                 height: 152,
                 decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(8)
-                ),
+                    borderRadius: BorderRadius.circular(8)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -65,11 +71,14 @@ class StatusScreenState extends State<StatusScreen>{
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
-                                  color: order.items.isEmpty ? const Color(0xFF777777): const Color(0xFFFF662B),
+                                  color: order.items.isEmpty
+                                      ? const Color(0xFF777777)
+                                      : const Color(0xFFFF662B),
                                 ),
                               ),
                             ],
                           ),
+                          // 테이블 리셋 UI
                           SizedBox(
                               width: 71,
                               height: 24,
@@ -83,17 +92,15 @@ class StatusScreenState extends State<StatusScreen>{
                                   child: const Text(
                                     '테이블 리셋',
                                     style: TextStyle(
-                                        fontSize: 12, fontWeight: FontWeight.w600
-                                    ),
-                                  )
-                              )
-                          )
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600),
+                                  )))
                         ],
                       ),
                     ),
+                    // 각 테이블 영역 카드에 주문메뉴 3개까지만 리스팅
                     const SizedBox(height: 8),
-                    ...order.items.take(3).map((item) =>
-                        Padding(
+                    ...order.items.take(3).map((item) => Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -106,15 +113,16 @@ class StatusScreenState extends State<StatusScreen>{
                                     style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w600,
-                                        color: Colors.black
-                                    ),
+                                        color: Colors.black),
                                   ),
                                 ],
                               ),
-                              // 개수
                               Text(
                                 '${item.quantity}개',
-                                style: const TextStyle(color: Color(0xFFAAAAAA),fontWeight: FontWeight.w500,fontSize: 12),
+                                style: const TextStyle(
+                                    color: Color(0xFFAAAAAA),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12),
                               ),
                             ],
                           ),
@@ -125,6 +133,7 @@ class StatusScreenState extends State<StatusScreen>{
                       height: 1,
                       thickness: 1,
                     ),
+                    // 각 테이블 영역 하단 영역UI(외 항목 및 총 금액)
                     Container(
                       height: 38,
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -132,7 +141,13 @@ class StatusScreenState extends State<StatusScreen>{
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('외 $otherQuantity항목',style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500,color: Color(0xFF777777)),),
+                            Text(
+                              '외 $otherQuantity항목',
+                              style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFF777777)),
+                            ),
                             Text(
                               '${f.format(totalPrice)}원',
                               style: const TextStyle(
@@ -141,8 +156,7 @@ class StatusScreenState extends State<StatusScreen>{
                                 color: Colors.black,
                               ),
                             ),
-                          ]
-                      ),
+                          ]),
                     ),
                   ],
                 ),
@@ -153,7 +167,8 @@ class StatusScreenState extends State<StatusScreen>{
       },
     );
   }
-// 테이블 팝업 화면
+
+// 테이블 팝업 화면 UI
   void tableDialog(BuildContext context, int tableNumber, Order order) {
     showDialog(
         context: context,
@@ -161,141 +176,175 @@ class StatusScreenState extends State<StatusScreen>{
           final formattedTime = DateFormat('HH:mm').format(order.orderTime);
           return AlertDialog(
             backgroundColor: const Color(0xFFF5F5F5),
-              shape: RoundedRectangleBorder(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            contentPadding: EdgeInsets.zero,
+            // 기본 구성 요소들이 shape 속성을 덮어씌우기 때문에 ClipRRect 위젯 사용
+            content: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-              ),
-              contentPadding: EdgeInsets.zero,
-              // 기본 구성 요소들이 shape 속성을 덮어씌우기 때문에 ClipRRect 위젯 사용
-              content: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child : SizedBox(
-                height: 800,
-                width: 600,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(left: 16),
-                      color: Colors.white,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '테이블 $tableNumber',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700,
-                              color: order.items.isEmpty ? const Color(0xFF777777): const Color(0xFFFF662B),),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.close),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
+                child: SizedBox(
+                  height: 800,
+                  width: 600,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 팝업창 상단 헤더 부분 UI
+                      Container(
+                        padding: const EdgeInsets.only(left: 16),
+                        color: Colors.white,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '테이블 $tableNumber',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                color: order.items.isEmpty
+                                    ? const Color(0xFF777777)
+                                    : const Color(0xFFFF662B),
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.close),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    const Divider(
-                      color: Color(0xFFF5F5F5),
-                      height: 1,
-                      thickness: 1,
-                    ),
-                    Container(
-                      color: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            '현재 주문중',
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Color(0xFFFF662B)),
-                          ),
-                          Row(
-                              children:[
+                      const Divider(
+                        color: Color(0xFFF5F5F5),
+                        height: 1,
+                        thickness: 1,
+                      ),
+                      // 주문 상태, 주문 번호, 시간 영역 UI
+                      Container(
+                        color: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              '현재 주문중',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFFFF662B)),
+                            ),
+                            Row(
+                              children: [
                                 Text(
                                   '주문번호 ${order.orderNumber}',
-                                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
                                 ),
-                                Text(' ($formattedTime)',
-                                  style: const TextStyle(fontSize: 13,fontWeight: FontWeight.w500,color: Color(0xFF777777),),
-                                ),
-                              ],
-                          ),
-                        const SizedBox(height: 4,),
-                        ...order.items.map((item) =>
-                            Column(
-                              children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                width: 400,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFF5F5F5),
-                                    borderRadius: BorderRadius.circular(8),
+                                Text(
+                                  ' ($formattedTime)',
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFF777777),
                                   ),
-                                child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children:[
-                                    Text(
-                                      '${item.mainMenu}, ${item.quantity}개',
-                                      style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.black
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          '${item.additionalMenu.map((
-                                              addItem) => addItem.name).join(' / ')} 추가',
-                                          style: const TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w500,
-                                            color: Color(0xFF777777),
-                                          ),
-                                        ),
-                                        Text(
-                                          '${f.format(item.totalPrice)}원',
-                                          style: const TextStyle(color: Color(0xFF777777),fontSize: 14, fontWeight: FontWeight.w600),
-                                        )
-                                      ],
-                                    ),
-                              ]
-                            ),
-
-                            ),
-                                const SizedBox(height: 8,)
-                          ],
-                          ),
-                        ),
-                          const SizedBox(height: 8),
-                          CustomPaint(
-                            painter: DotDivider(),
-                            size: const Size(double.infinity,3),
-                          ),
-                          Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 16),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text('총 금액',
-                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
-                                Text('${f.format(order.totalPrice)}원',
-                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),)
+                                ),
                               ],
                             ),
-                          )
-
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              )
-              ),
+                            const SizedBox(
+                              height: 4,
+                            ),
+                            // 주문 리스트 영역
+                            ...order.items.map(
+                              (item) => Column(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 8),
+                                    width: 400,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFF5F5F5),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '${item.mainMenu}, ${item.quantity}개',
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.black),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                '${item.additionalMenu.map((addItem) => addItem.name).join(' / ')} 추가',
+                                                style: const TextStyle(
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Color(0xFF777777),
+                                                ),
+                                              ),
+                                              Text(
+                                                '${f.format(item.totalPrice)}원',
+                                                style: const TextStyle(
+                                                    color: Color(0xFF777777),
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              )
+                                            ],
+                                          ),
+                                        ]),
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  )
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            // 점선 부터 총 금액 영역 UI
+                            CustomPaint(
+                              painter: DotDivider(),
+                              size: const Size(double.infinity, 3),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 16),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    '총 금액',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  Text(
+                                    '${f.format(order.totalPrice)}원',
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700),
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                )),
           );
-        }
-    );
+        });
   }
 }
 

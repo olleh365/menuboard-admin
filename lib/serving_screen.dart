@@ -10,11 +10,12 @@ class ServingScreen extends StatefulWidget {
   ServingScreenState createState() => ServingScreenState();
 }
 
-class ServingScreenState extends State<ServingScreen>{
+class ServingScreenState extends State<ServingScreen> {
   final Map<int, Map<int, bool>> _checkedItems = {};
 
   @override
   Widget build(BuildContext context) {
+    // 승인된 주문 테이블 영역
     final orders = Provider.of<OrderProvider>(context).approvedOrders;
     return ListView.builder(
       itemCount: orders.length,
@@ -43,8 +44,7 @@ class ServingScreenState extends State<ServingScreen>{
                               style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
-                                  color: Color(0xFF777777)
-                              ),
+                                  color: Color(0xFF777777)),
                             ),
                             Text(
                               ' ($formattedTime)',
@@ -64,15 +64,22 @@ class ServingScreenState extends State<ServingScreen>{
                             ),
                           ],
                         ),
+                        // 전체 완료 버튼
                         SizedBox(
                             width: 61,
                             height: 24,
                             child: TextButton(
-                                onPressed: (){
+                                onPressed: () {
+                                  // 현재 인덱스에 해당하는 주문의 모든 항목의 체크 상태 업데이트, 엔트리 리스트로 부터 새로운 맵 생성함
                                   setState(() {
-                                    final allChecked = _checkedItems[index]?.values.every((checked) => checked) ?? false;
+                                    final allChecked = _checkedItems[index]
+                                            ?.values
+                                            .every((checked) => checked) ??
+                                        false;
                                     _checkedItems[index] = Map.fromEntries(
-                                      order.items.map((item) => MapEntry(order.items.indexOf(item), !allChecked)),
+                                      order.items.map((item) => MapEntry(
+                                          order.items.indexOf(item),
+                                          !allChecked)),
                                     );
                                   });
                                 },
@@ -84,23 +91,21 @@ class ServingScreenState extends State<ServingScreen>{
                                 child: const Text(
                                   '전체 완료',
                                   style: TextStyle(
-                                      fontSize: 12, fontWeight: FontWeight.w600
-                                  ),
-                                )
-                            )
-                        )
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600),
+                                )))
                       ],
                     ),
                   ),
                   const Divider(
                     color: Color(0xFFF5F5F5),
                   ),
+                  // 승인된 주문 목록리스트 UI
                   ...order.items.map((item) {
                     final itemIndex = order.items.indexOf(item);
                     final isChecked = _checkedItems[index]?[itemIndex] ?? false;
 
-                    return
-                    Padding(
+                    return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -114,19 +119,19 @@ class ServingScreenState extends State<ServingScreen>{
                                 style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
-                                    color: Colors.black
-                                ),
+                                    color: Colors.black),
                               ),
                               Text(
-                                '${item.additionalMenu.map((addItem) =>
-                                addItem.name).join(', ')} 추가',
+                                '${item.additionalMenu.map((addItem) => addItem.name).join(' 추가 / ')} 추가',
                                 style: const TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w500,
                                   color: Color(0xFF777777),
                                 ),
                               ),
-                              const SizedBox(height: 8,)
+                              const SizedBox(
+                                height: 8,
+                              )
                             ],
                           ),
                           Checkbox(
@@ -134,7 +139,8 @@ class ServingScreenState extends State<ServingScreen>{
                             onChanged: (bool? value) {
                               setState(() {
                                 _checkedItems[index] ??= {};
-                                _checkedItems[index]![itemIndex] = value ?? false;
+                                _checkedItems[index]![itemIndex] =
+                                    value ?? false;
                               });
                             },
                             activeColor: const Color(0xFFFF662B),
@@ -146,8 +152,7 @@ class ServingScreenState extends State<ServingScreen>{
                         ],
                       ),
                     );
-                  }
-                  ),
+                  }),
                 ],
               ),
             ),

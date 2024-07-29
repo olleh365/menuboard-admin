@@ -62,7 +62,6 @@ class OrderProvider extends ChangeNotifier {
           ],
           quantity: 2,
         ),
-
       ],
     ),
     Order(
@@ -80,12 +79,12 @@ class OrderProvider extends ChangeNotifier {
         ),
       ],
     ),
-
   ];
 
   List<Order> get orders => _orders;
-  final List<Order> approvedOrders = [];
 
+  // 주문 승인된 목록리스트
+  final List<Order> approvedOrders = [];
 
   void approveOrder(Order order) {
     approvedOrders.add(order);
