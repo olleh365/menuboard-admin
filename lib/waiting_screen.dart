@@ -125,6 +125,7 @@ class WaitingScreen extends StatelessWidget {
                   const Divider(
                     color: Color(0xFFF5F5F5),
                   ),
+                  // order 모델 객체 리스트를 위젯 리스트로 변환
                   ...order.items.map((item) =>
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),

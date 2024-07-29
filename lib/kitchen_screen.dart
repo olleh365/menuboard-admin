@@ -15,6 +15,7 @@ class KitchenScreenState extends State<KitchenScreen> {
   @override
   Widget build(BuildContext context) {
     final orders = Provider.of<OrderProvider>(context).approvedOrders;
+    // 각 오더의 주문 목록 호출 (orderItems 리스트 변수에 Order.items 리스트를 결합하여 저장함)
     final orderItems = orders.expand((order) => order.items).toList();
 
     return ListView.builder(
