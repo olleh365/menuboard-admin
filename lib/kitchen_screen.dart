@@ -28,10 +28,10 @@ class KitchenScreenState extends State<KitchenScreen> {
           children: [
             if (index == 0) const SizedBox(height: 8),
             Container(
-              color: Colors.white,
+              color: isChecked ? const Color(0xFFFAFAFA) : Colors.white,
               child: Column(
                 children: [
-                  Padding(
+                  Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -42,10 +42,13 @@ class KitchenScreenState extends State<KitchenScreen> {
                             const SizedBox(height: 16),
                             Text(
                               '${orderItem.mainMenu}, ${orderItem.quantity}개',
-                              style: const TextStyle(
+                              style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
-                                  color: Colors.black),
+                                  color: isChecked ? const Color(0xFF777777) : Colors.black,
+                                decoration: isChecked ? TextDecoration.lineThrough : null,
+                                decorationColor: const Color(0xFF777777),
+                              ),
                             ),
                             Text(
                               '${orderItem.additionalMenu.map((addItem) => addItem.name).join(' 추가 / ')} 추가',

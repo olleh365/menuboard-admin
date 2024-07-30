@@ -116,17 +116,20 @@ class ServingScreenState extends State<ServingScreen> {
                               const SizedBox(height: 8),
                               Text(
                                 '${item.mainMenu}, ${item.quantity}개',
-                                style: const TextStyle(
+                                style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
-                                    color: Colors.black),
+                                    color: Colors.black,
+                                  decoration: isChecked ? TextDecoration.lineThrough : null,
+                                ),
                               ),
                               Text(
                                 '${item.additionalMenu.map((addItem) => addItem.name).join(' 추가 / ')} 추가',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w500,
-                                  color: Color(0xFF777777),
+                                  color: const Color(0xFF777777),
+                                  decoration: isChecked ? TextDecoration.lineThrough : null,
                                 ),
                               ),
                               const SizedBox(
