@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:menuboard_admin/exam_menu_model.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'main.dart';
-import 'order_provider.dart';
+import 'package:dio/dio.dart';
+import 'order_model.dart';
 
 class StatusScreen extends StatefulWidget {
   const StatusScreen({super.key});
@@ -14,20 +13,40 @@ class StatusScreen extends StatefulWidget {
 
 class StatusScreenState extends State<StatusScreen> {
   var f = NumberFormat('###,###,###,###');
+  final Dio _dio = Dio();
+  OrderResponse? _orderResponse;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchOrderData();
+  }
+
+  Future<void> _fetchOrderData() async {
+    try {
+      final response = await _dio.get(
+        'https://apidev.pocmenu.com/menuboard/api/admin/orders/grouped-tables?storeSeq=16&date=20240731',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuS2tHR01Wb2hpZm9jUmNTRzYwTzdycWlhZTEzIiwiYXV0aFJvbGVzIjoiU1RPUkVfQURNSU4iLCJpYXQiOjE3MjI1MTc1NzIsImV4cCI6MTcyMjUyMTE3Mn0.8P_xVJEI7SWdDLQbeua3UUsnr2gXggBV5bl6JCidKaQ',
+            'accept': 'application/json;charset=UTF-8',
+          },
+        ),
+      );
+      setState(() {
+        _orderResponse = OrderResponse.fromJson(response.data);
+      });
+    } catch (e) {
+      debugPrint('Error fetching orders: $e');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    final orders = Provider.of<OrderProvider>(context).approvedOrders;
-    // 테이블 번호와 Order 매핑
-    final tableOrders = {
-      for (var i = 1; i <= 8; i++)
-        i: orders.firstWhere((order) => order.tableNumber == i,
-            orElse: () => Order(
-                orderNumber: '',
-                orderTime: DateTime.now(),
-                tableNumber: i,
-                items: []))
-    };
+    if (_orderResponse == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
     // 테이블 영역 카드 UI
     return GridView.builder(
@@ -38,16 +57,25 @@ class StatusScreenState extends State<StatusScreen> {
         mainAxisSpacing: 8.0,
         childAspectRatio: 1.9 / 1.5,
       ),
-      itemCount: tableOrders.length,
+      // 테이블 수 설정
+      itemCount: 8,
       itemBuilder: (context, index) {
         final tableNumber = index + 1;
-        final order = tableOrders[tableNumber];
-        final totalPrice =
-            order?.items.fold(0.0, (sum, item) => sum + item.totalPrice);
-        final otherQuantity =
-            order!.items.length >= 4 ? order.items.length - 3 : 0;
+        final orderGroup = _orderResponse!.data.firstWhere(
+              (og) => og.tableNum == tableNumber,
+          orElse: () => OrderGroup(
+            orderGroupNum: -1,
+            tableNum: tableNumber,
+            totalOrderPrice: 0,
+            orders: [],
+          ),
+        );
+        final totalPrice = orderGroup.totalOrderPrice;
+        final orders = orderGroup.orders;
+        final otherQuantity = orders.length >= 4 ? orders.length - 3 : 0;
+
         return GestureDetector(
-          onTap: () => tableDialog(context, tableNumber, order),
+          onTap: () => tableDialog(context, orderGroup),
           child: Column(
             children: [
               Container(
@@ -71,9 +99,7 @@ class StatusScreenState extends State<StatusScreen> {
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
-                                  color: order.items.isEmpty
-                                      ? const Color(0xFF777777)
-                                      : const Color(0xFFFF662B),
+                                  color: orders.isEmpty ? const Color(0xFF777777) : const Color(0xFFFF662B),
                                 ),
                               ),
                             ],
@@ -100,7 +126,7 @@ class StatusScreenState extends State<StatusScreen> {
                     ),
                     // 각 테이블 영역 카드에 주문메뉴 3개까지만 리스팅
                     const SizedBox(height: 8),
-                    ...order.items.take(3).map((item) => Padding(
+                    ...orderGroup.orders.take(3).map((order) => Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -109,7 +135,7 @@ class StatusScreenState extends State<StatusScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    item.mainMenu,
+                                    order.menuList.map((menu)=> menu.menuName).join(', '),
                                     style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w600,
@@ -118,7 +144,7 @@ class StatusScreenState extends State<StatusScreen> {
                                 ],
                               ),
                               Text(
-                                '${item.quantity}개',
+                                '${order.menuList.map((menu) => menu.quantity).reduce((a,b)=> a + b)}개',
                                 style: const TextStyle(
                                     color: Color(0xFFAAAAAA),
                                     fontWeight: FontWeight.w500,
@@ -169,11 +195,10 @@ class StatusScreenState extends State<StatusScreen> {
   }
 
 // 테이블 팝업 화면 UI
-  void tableDialog(BuildContext context, int tableNumber, Order order) {
+  void tableDialog(BuildContext context, OrderGroup orderGroup) {
     showDialog(
         context: context,
         builder: (context) {
-          final formattedTime = DateFormat('HH:mm').format(order.orderTime);
           return AlertDialog(
             backgroundColor: const Color(0xFFF5F5F5),
             shape: RoundedRectangleBorder(
@@ -197,13 +222,11 @@ class StatusScreenState extends State<StatusScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '테이블 $tableNumber',
+                              '테이블 ${orderGroup.tableNum}',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
-                                color: order.items.isEmpty
-                                    ? const Color(0xFF777777)
-                                    : const Color(0xFFFF662B),
+                                color: orderGroup.orders.isEmpty ? const Color(0xFF777777) : const Color(0xFFFF662B)
                               ),
                             ),
                             IconButton(
@@ -235,32 +258,29 @@ class StatusScreenState extends State<StatusScreen> {
                                   fontWeight: FontWeight.w500,
                                   color: Color(0xFFFF662B)),
                             ),
-                            Row(
-                              children: [
-                                Text(
-                                  '주문번호 ${order.orderNumber}',
-                                  style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                Text(
-                                  ' ($formattedTime)',
-                                  style: const TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xFF777777),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 4,
-                            ),
-                            // 주문 리스트 영역
-                            ...order.items.map(
-                              (item) => Column(
+                            ...orderGroup.orders.map((order) {
+                              final formattedTime = DateFormat('HH:mm').format(order.orderDate);
+                              return Column(
                                 children: [
-                                  Container(
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '주문번호 ${order.orderNum}',
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      Text(
+                                        ' ($formattedTime)',
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xFF777777),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  ...order.menuList.map((menu) => Container(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16, vertical: 8),
                                     width: 400,
@@ -270,10 +290,10 @@ class StatusScreenState extends State<StatusScreen> {
                                     ),
                                     child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            '${item.mainMenu}, ${item.quantity}개',
+                                            '${menu.menuName}, ${menu.quantity}개',
                                             style: const TextStyle(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w700,
@@ -281,10 +301,10 @@ class StatusScreenState extends State<StatusScreen> {
                                           ),
                                           Row(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                '${item.additionalMenu.map((addItem) => addItem.name).join(' / ')} 추가',
+                                                menu.selectedOptions.map((option) => option.menuOptionName).join(' / '),
                                                 style: const TextStyle(
                                                   fontSize: 13,
                                                   fontWeight: FontWeight.w500,
@@ -292,23 +312,22 @@ class StatusScreenState extends State<StatusScreen> {
                                                 ),
                                               ),
                                               Text(
-                                                '${f.format(item.totalPrice)}원',
+                                                '${f.format(menu.menuTotalPrice)}원',
                                                 style: const TextStyle(
                                                     color: Color(0xFF777777),
                                                     fontSize: 14,
                                                     fontWeight:
-                                                        FontWeight.w600),
+                                                    FontWeight.w600),
                                               )
                                             ],
                                           ),
-                                        ]),
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  )
+                                        ],
+                                    ),
+                                  )),
                                 ],
-                              ),
-                            ),
+                              );
+                            }),
+
                             const SizedBox(height: 8),
                             // 점선 부터 총 금액 영역 UI
                             CustomPaint(
@@ -329,7 +348,7 @@ class StatusScreenState extends State<StatusScreen> {
                                         fontWeight: FontWeight.w500),
                                   ),
                                   Text(
-                                    '${f.format(order.totalPrice)}원',
+                                    '${f.format(orderGroup.totalOrderPrice)}원',
                                     style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w700),
