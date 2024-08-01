@@ -28,7 +28,7 @@ class StatusScreenState extends State<StatusScreen> {
         'https://apidev.pocmenu.com/menuboard/api/admin/orders/grouped-tables?storeSeq=16&date=20240731',
         options: Options(
           headers: {
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuS2tHR01Wb2hpZm9jUmNTRzYwTzdycWlhZTEzIiwiYXV0aFJvbGVzIjoiU1RPUkVfQURNSU4iLCJpYXQiOjE3MjI1MTc1NzIsImV4cCI6MTcyMjUyMTE3Mn0.8P_xVJEI7SWdDLQbeua3UUsnr2gXggBV5bl6JCidKaQ',
+            'Authorization': 'Bearer ..',
             'accept': 'application/json;charset=UTF-8',
           },
         ),
