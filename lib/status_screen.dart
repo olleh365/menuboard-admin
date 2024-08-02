@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:menuboard_admin/menu_network.dart';
+import 'package:menuboard_admin/storeState.dart';
 import 'main.dart';
 import 'package:dio/dio.dart';
+import 'menu_network.dart';
 import 'order_model.dart';
+import 'order_provider.dart';
+import 'package:provider/provider.dart';
+
 
 class StatusScreen extends StatefulWidget {
   const StatusScreen({super.key});
@@ -13,28 +19,24 @@ class StatusScreen extends StatefulWidget {
 
 class StatusScreenState extends State<StatusScreen> {
   var f = NumberFormat('###,###,###,###');
-  final Dio _dio = Dio();
+  late final MenuNetwork _menuNetwork;
   OrderResponse? _orderResponse;
 
   @override
   void initState() {
     super.initState();
+    final dio = Dio();
+    dio.options.headers['Authorization'] = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuS2tHR01Wb2hpZm9jUmNTRzYwTzdycWlhZTEzIiwiYXV0aFJvbGVzIjoiU1RPUkVfQURNSU4iLCJpYXQiOjE3MjI1ODk4NjUsImV4cCI6MTcyMjU5MzQ2NX0.hrNqmmYAztxHyoc7ywHQPWcd4Bzc18CvJ5fHSkZCsz4';
+    _menuNetwork = MenuNetwork(dio);
     _fetchOrderData();
   }
 
   Future<void> _fetchOrderData() async {
     try {
-      final response = await _dio.get(
-        'https://apidev.pocmenu.com/menuboard/api/admin/orders/grouped-tables?storeSeq=16&date=20240731',
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer ..',
-            'accept': 'application/json;charset=UTF-8',
-          },
-        ),
-      );
+      final storeState = Provider.of<StoreState>(context, listen: false);
+      final response = await _menuNetwork.getOrderGroups(storeState.storeSeq, storeState.date);
       setState(() {
-        _orderResponse = OrderResponse.fromJson(response.data);
+        _orderResponse = response;
       });
     } catch (e) {
       debugPrint('Error fetching orders: $e');

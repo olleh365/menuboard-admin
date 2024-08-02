@@ -6,12 +6,18 @@ import 'waiting_screen.dart';
 import 'kitchen_screen.dart';
 import 'serving_screen.dart';
 import 'status_screen.dart';
+import 'storeState.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => OrderProvider(),
-    child: const MyApp(),
-  ));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => StoreState()),
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 // 임시 토스트 팝업 삭제해야함.
