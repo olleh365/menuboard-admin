@@ -4,9 +4,7 @@ import 'package:menuboard_admin/menu_network.dart';
 import 'package:menuboard_admin/storeState.dart';
 import 'main.dart';
 import 'package:dio/dio.dart';
-import 'menu_network.dart';
-import 'order_model.dart';
-import 'order_provider.dart';
+import 'grouped_tables_model.dart';
 import 'package:provider/provider.dart';
 
 
@@ -20,13 +18,13 @@ class StatusScreen extends StatefulWidget {
 class StatusScreenState extends State<StatusScreen> {
   var f = NumberFormat('###,###,###,###');
   late final MenuNetwork _menuNetwork;
-  OrderResponse? _orderResponse;
+  TableResponse? _orderResponse;
 
   @override
   void initState() {
     super.initState();
     final dio = Dio();
-    dio.options.headers['Authorization'] = 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJuS2tHR01Wb2hpZm9jUmNTRzYwTzdycWlhZTEzIiwiYXV0aFJvbGVzIjoiU1RPUkVfQURNSU4iLCJpYXQiOjE3MjI1ODk4NjUsImV4cCI6MTcyMjU5MzQ2NX0.hrNqmmYAztxHyoc7ywHQPWcd4Bzc18CvJ5fHSkZCsz4';
+    dio.options.headers['Authorization'] = 'Bearer ..';
     _menuNetwork = MenuNetwork(dio);
     _fetchOrderData();
   }

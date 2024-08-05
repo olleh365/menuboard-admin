@@ -1,15 +1,27 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'order_model.freezed.dart';
-part 'order_model.g.dart';
+part 'grouped_tables_model.freezed.dart';
+part 'grouped_tables_model.g.dart';
 
 @freezed
-class OrderResponse with _$OrderResponse {
-  factory OrderResponse({
-    required List<Order> data,
-  }) = _OrderResponse;
+class TableResponse with _$TableResponse {
+  factory TableResponse({
+    required List<OrderGroup> data,
+  }) = _TableResponse;
 
-  factory OrderResponse.fromJson(Map<String, dynamic> json) => _$OrderResponseFromJson(json);
+  factory TableResponse.fromJson(Map<String, dynamic> json) => _$TableResponseFromJson(json);
+}
+
+@freezed
+class OrderGroup with _$OrderGroup {
+  factory OrderGroup({
+    required int orderGroupNum,
+    required int tableNum,
+    required int totalOrderPrice,
+    required List<Order> orders,
+  }) = _OrderGroup;
+
+  factory OrderGroup.fromJson(Map<String, dynamic> json) => _$OrderGroupFromJson(json);
 }
 
 @freezed
@@ -53,7 +65,7 @@ class Option with _$Option {
   factory Option({
     required int menuOptionSeq,
     required String menuOptionName,
-  }) = _Option;
+}) = _Option;
 
   factory Option.fromJson(Map<String, dynamic> json) => _$OptionFromJson(json);
 }

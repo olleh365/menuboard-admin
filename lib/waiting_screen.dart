@@ -1,18 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:menuboard_admin/exam_menu_model.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'order_provider.dart';
+import 'menu_network.dart';
+import 'storeState.dart';
+import 'package:dio/dio.dart';
+import 'order_model.dart';
 
-class WaitingScreen extends StatelessWidget {
+
+class WaitingScreen extends StatefulWidget {
   const WaitingScreen({super.key});
 
-  void cancelWindow(BuildContext context, OrderItem item) {
+  @override
+  WaitingScreenState createState() => WaitingScreenState();
+}
+
+class WaitingScreenState extends State<WaitingScreen> {
+  late MenuNetwork _menuNetwork;
+  List<Order> _orders = [];
+
+  @override
+  void initState() {
+    super.initState();
+    final dio = Dio();
+    dio.options.headers['Authorization'] = 'Bearer ..';
+    _menuNetwork = MenuNetwork(dio);
+    _fetchOrders();
+  }
+
+  Future<void> _fetchOrders() async {
+    final storeState = Provider.of<StoreState>(context, listen: false);
+    try {
+      final response = await _menuNetwork.getOrders(storeState.storeSeq, storeState.date);
+      setState(() {
+        _orders = response.data;
+      });
+    } catch (e) {
+      debugPrint('Error fetching orders: $e');
+    }
+  }
+
+  void cancelWindow(BuildContext context, Menu item) {
     var f = NumberFormat('###,###,###,###');
     final additionalMenu =
-        item.additionalMenu.map((addItem) => addItem.name).join('/');
+        item.selectedOptions.map((addItem) => addItem.menuOptionName).join('/');
     final cencelMenu =
-        '[${item.mainMenu}/$additionalMenu ${item.quantity}개 ${f.format(item.totalPrice)}원]\n'
+        '[${item.menuName}/$additionalMenu ${item.quantity}개 ${f.format(item.menuTotalPrice)}원]\n'
         '해당 주문을 취소하시겠습니까?';
     // 취소 시 팝업창 빌드
     showDialog(
@@ -71,12 +103,11 @@ class WaitingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final orders = Provider.of<OrderProvider>(context).orders;
     return ListView.builder(
-      itemCount: orders.length,
+      itemCount: _orders.length,
       itemBuilder: (context, index) {
-        final order = orders[index];
-        final formattedTime = DateFormat('HH:mm').format(order.orderTime);
+        final order = _orders[index];
+        final formattedTime = DateFormat('HH:mm').format(order.orderDate);
         return Column(
           children: [
             const SizedBox(height: 8),
@@ -95,7 +126,7 @@ class WaitingScreen extends StatelessWidget {
                           //
                           children: [
                             Text(
-                              order.orderNumber,
+                              order.orderNum,
                               style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -110,7 +141,7 @@ class WaitingScreen extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              ' | 테이블 ${order.tableNumber}',
+                              ' | 테이블 ${order.tableNum}',
                               style: const TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500,
@@ -124,9 +155,7 @@ class WaitingScreen extends StatelessWidget {
                             height: 24,
                             child: TextButton(
                                 onPressed: () {
-                                  Provider.of<OrderProvider>(context,
-                                          listen: false)
-                                      .approveOrder(order);
+
                                 },
                                 style: TextButton.styleFrom(
                                   backgroundColor: const Color(0xFFFF662B),
@@ -146,7 +175,7 @@ class WaitingScreen extends StatelessWidget {
                     color: Color(0xFFF5F5F5),
                   ),
                   // order 모델 객체 리스트를 위젯 리스트로 변환
-                  ...order.items.map((item) => Padding(
+                  ...order.menuList.map((item) => Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -156,14 +185,14 @@ class WaitingScreen extends StatelessWidget {
                               children: [
                                 const SizedBox(height: 8),
                                 Text(
-                                  '${item.mainMenu}, ${item.quantity}개',
+                                  '${item.menuName}, ${item.quantity}개',
                                   style: const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w700,
                                       color: Colors.black),
                                 ),
                                 Text(
-                                  '${item.additionalMenu.map((addItem) => addItem.name).join(' / 추가 ')} 추가',
+                                  '${item.selectedOptions.map((addItem) => addItem.menuOptionName).join(' / 추가 ')} 추가',
                                   style: const TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500,

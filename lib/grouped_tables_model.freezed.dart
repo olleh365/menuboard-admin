@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'order_model.dart';
+part of 'grouped_tables_model.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,33 +14,33 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-OrderResponse _$OrderResponseFromJson(Map<String, dynamic> json) {
-  return _OrderResponse.fromJson(json);
+TableResponse _$TableResponseFromJson(Map<String, dynamic> json) {
+  return _TableResponse.fromJson(json);
 }
 
 /// @nodoc
-mixin _$OrderResponse {
-  List<Order> get data => throw _privateConstructorUsedError;
+mixin _$TableResponse {
+  List<OrderGroup> get data => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $OrderResponseCopyWith<OrderResponse> get copyWith =>
+  $TableResponseCopyWith<TableResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $OrderResponseCopyWith<$Res> {
-  factory $OrderResponseCopyWith(
-          OrderResponse value, $Res Function(OrderResponse) then) =
-      _$OrderResponseCopyWithImpl<$Res, OrderResponse>;
+abstract class $TableResponseCopyWith<$Res> {
+  factory $TableResponseCopyWith(
+          TableResponse value, $Res Function(TableResponse) then) =
+      _$TableResponseCopyWithImpl<$Res, TableResponse>;
   @useResult
-  $Res call({List<Order> data});
+  $Res call({List<OrderGroup> data});
 }
 
 /// @nodoc
-class _$OrderResponseCopyWithImpl<$Res, $Val extends OrderResponse>
-    implements $OrderResponseCopyWith<$Res> {
-  _$OrderResponseCopyWithImpl(this._value, this._then);
+class _$TableResponseCopyWithImpl<$Res, $Val extends TableResponse>
+    implements $TableResponseCopyWith<$Res> {
+  _$TableResponseCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -56,28 +56,28 @@ class _$OrderResponseCopyWithImpl<$Res, $Val extends OrderResponse>
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as List<Order>,
+              as List<OrderGroup>,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$OrderResponseImplCopyWith<$Res>
-    implements $OrderResponseCopyWith<$Res> {
-  factory _$$OrderResponseImplCopyWith(
-          _$OrderResponseImpl value, $Res Function(_$OrderResponseImpl) then) =
-      __$$OrderResponseImplCopyWithImpl<$Res>;
+abstract class _$$TableResponseImplCopyWith<$Res>
+    implements $TableResponseCopyWith<$Res> {
+  factory _$$TableResponseImplCopyWith(
+          _$TableResponseImpl value, $Res Function(_$TableResponseImpl) then) =
+      __$$TableResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Order> data});
+  $Res call({List<OrderGroup> data});
 }
 
 /// @nodoc
-class __$$OrderResponseImplCopyWithImpl<$Res>
-    extends _$OrderResponseCopyWithImpl<$Res, _$OrderResponseImpl>
-    implements _$$OrderResponseImplCopyWith<$Res> {
-  __$$OrderResponseImplCopyWithImpl(
-      _$OrderResponseImpl _value, $Res Function(_$OrderResponseImpl) _then)
+class __$$TableResponseImplCopyWithImpl<$Res>
+    extends _$TableResponseCopyWithImpl<$Res, _$TableResponseImpl>
+    implements _$$TableResponseImplCopyWith<$Res> {
+  __$$TableResponseImplCopyWithImpl(
+      _$TableResponseImpl _value, $Res Function(_$TableResponseImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -85,26 +85,26 @@ class __$$OrderResponseImplCopyWithImpl<$Res>
   $Res call({
     Object? data = null,
   }) {
-    return _then(_$OrderResponseImpl(
+    return _then(_$TableResponseImpl(
       data: null == data
           ? _value._data
           : data // ignore: cast_nullable_to_non_nullable
-              as List<Order>,
+              as List<OrderGroup>,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$OrderResponseImpl implements _OrderResponse {
-  _$OrderResponseImpl({required final List<Order> data}) : _data = data;
+class _$TableResponseImpl implements _TableResponse {
+  _$TableResponseImpl({required final List<OrderGroup> data}) : _data = data;
 
-  factory _$OrderResponseImpl.fromJson(Map<String, dynamic> json) =>
-      _$$OrderResponseImplFromJson(json);
+  factory _$TableResponseImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TableResponseImplFromJson(json);
 
-  final List<Order> _data;
+  final List<OrderGroup> _data;
   @override
-  List<Order> get data {
+  List<OrderGroup> get data {
     if (_data is EqualUnmodifiableListView) return _data;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_data);
@@ -112,14 +112,14 @@ class _$OrderResponseImpl implements _OrderResponse {
 
   @override
   String toString() {
-    return 'OrderResponse(data: $data)';
+    return 'TableResponse(data: $data)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$OrderResponseImpl &&
+            other is _$TableResponseImpl &&
             const DeepCollectionEquality().equals(other._data, _data));
   }
 
@@ -131,29 +131,239 @@ class _$OrderResponseImpl implements _OrderResponse {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$OrderResponseImplCopyWith<_$OrderResponseImpl> get copyWith =>
-      __$$OrderResponseImplCopyWithImpl<_$OrderResponseImpl>(this, _$identity);
+  _$$TableResponseImplCopyWith<_$TableResponseImpl> get copyWith =>
+      __$$TableResponseImplCopyWithImpl<_$TableResponseImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$OrderResponseImplToJson(
+    return _$$TableResponseImplToJson(
       this,
     );
   }
 }
 
-abstract class _OrderResponse implements OrderResponse {
-  factory _OrderResponse({required final List<Order> data}) =
-      _$OrderResponseImpl;
+abstract class _TableResponse implements TableResponse {
+  factory _TableResponse({required final List<OrderGroup> data}) =
+      _$TableResponseImpl;
 
-  factory _OrderResponse.fromJson(Map<String, dynamic> json) =
-      _$OrderResponseImpl.fromJson;
+  factory _TableResponse.fromJson(Map<String, dynamic> json) =
+      _$TableResponseImpl.fromJson;
 
   @override
-  List<Order> get data;
+  List<OrderGroup> get data;
   @override
   @JsonKey(ignore: true)
-  _$$OrderResponseImplCopyWith<_$OrderResponseImpl> get copyWith =>
+  _$$TableResponseImplCopyWith<_$TableResponseImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+OrderGroup _$OrderGroupFromJson(Map<String, dynamic> json) {
+  return _OrderGroup.fromJson(json);
+}
+
+/// @nodoc
+mixin _$OrderGroup {
+  int get orderGroupNum => throw _privateConstructorUsedError;
+  int get tableNum => throw _privateConstructorUsedError;
+  int get totalOrderPrice => throw _privateConstructorUsedError;
+  List<Order> get orders => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $OrderGroupCopyWith<OrderGroup> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $OrderGroupCopyWith<$Res> {
+  factory $OrderGroupCopyWith(
+          OrderGroup value, $Res Function(OrderGroup) then) =
+      _$OrderGroupCopyWithImpl<$Res, OrderGroup>;
+  @useResult
+  $Res call(
+      {int orderGroupNum,
+      int tableNum,
+      int totalOrderPrice,
+      List<Order> orders});
+}
+
+/// @nodoc
+class _$OrderGroupCopyWithImpl<$Res, $Val extends OrderGroup>
+    implements $OrderGroupCopyWith<$Res> {
+  _$OrderGroupCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? orderGroupNum = null,
+    Object? tableNum = null,
+    Object? totalOrderPrice = null,
+    Object? orders = null,
+  }) {
+    return _then(_value.copyWith(
+      orderGroupNum: null == orderGroupNum
+          ? _value.orderGroupNum
+          : orderGroupNum // ignore: cast_nullable_to_non_nullable
+              as int,
+      tableNum: null == tableNum
+          ? _value.tableNum
+          : tableNum // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalOrderPrice: null == totalOrderPrice
+          ? _value.totalOrderPrice
+          : totalOrderPrice // ignore: cast_nullable_to_non_nullable
+              as int,
+      orders: null == orders
+          ? _value.orders
+          : orders // ignore: cast_nullable_to_non_nullable
+              as List<Order>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$OrderGroupImplCopyWith<$Res>
+    implements $OrderGroupCopyWith<$Res> {
+  factory _$$OrderGroupImplCopyWith(
+          _$OrderGroupImpl value, $Res Function(_$OrderGroupImpl) then) =
+      __$$OrderGroupImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int orderGroupNum,
+      int tableNum,
+      int totalOrderPrice,
+      List<Order> orders});
+}
+
+/// @nodoc
+class __$$OrderGroupImplCopyWithImpl<$Res>
+    extends _$OrderGroupCopyWithImpl<$Res, _$OrderGroupImpl>
+    implements _$$OrderGroupImplCopyWith<$Res> {
+  __$$OrderGroupImplCopyWithImpl(
+      _$OrderGroupImpl _value, $Res Function(_$OrderGroupImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? orderGroupNum = null,
+    Object? tableNum = null,
+    Object? totalOrderPrice = null,
+    Object? orders = null,
+  }) {
+    return _then(_$OrderGroupImpl(
+      orderGroupNum: null == orderGroupNum
+          ? _value.orderGroupNum
+          : orderGroupNum // ignore: cast_nullable_to_non_nullable
+              as int,
+      tableNum: null == tableNum
+          ? _value.tableNum
+          : tableNum // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalOrderPrice: null == totalOrderPrice
+          ? _value.totalOrderPrice
+          : totalOrderPrice // ignore: cast_nullable_to_non_nullable
+              as int,
+      orders: null == orders
+          ? _value._orders
+          : orders // ignore: cast_nullable_to_non_nullable
+              as List<Order>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$OrderGroupImpl implements _OrderGroup {
+  _$OrderGroupImpl(
+      {required this.orderGroupNum,
+      required this.tableNum,
+      required this.totalOrderPrice,
+      required final List<Order> orders})
+      : _orders = orders;
+
+  factory _$OrderGroupImpl.fromJson(Map<String, dynamic> json) =>
+      _$$OrderGroupImplFromJson(json);
+
+  @override
+  final int orderGroupNum;
+  @override
+  final int tableNum;
+  @override
+  final int totalOrderPrice;
+  final List<Order> _orders;
+  @override
+  List<Order> get orders {
+    if (_orders is EqualUnmodifiableListView) return _orders;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_orders);
+  }
+
+  @override
+  String toString() {
+    return 'OrderGroup(orderGroupNum: $orderGroupNum, tableNum: $tableNum, totalOrderPrice: $totalOrderPrice, orders: $orders)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$OrderGroupImpl &&
+            (identical(other.orderGroupNum, orderGroupNum) ||
+                other.orderGroupNum == orderGroupNum) &&
+            (identical(other.tableNum, tableNum) ||
+                other.tableNum == tableNum) &&
+            (identical(other.totalOrderPrice, totalOrderPrice) ||
+                other.totalOrderPrice == totalOrderPrice) &&
+            const DeepCollectionEquality().equals(other._orders, _orders));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, orderGroupNum, tableNum,
+      totalOrderPrice, const DeepCollectionEquality().hash(_orders));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$OrderGroupImplCopyWith<_$OrderGroupImpl> get copyWith =>
+      __$$OrderGroupImplCopyWithImpl<_$OrderGroupImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$OrderGroupImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _OrderGroup implements OrderGroup {
+  factory _OrderGroup(
+      {required final int orderGroupNum,
+      required final int tableNum,
+      required final int totalOrderPrice,
+      required final List<Order> orders}) = _$OrderGroupImpl;
+
+  factory _OrderGroup.fromJson(Map<String, dynamic> json) =
+      _$OrderGroupImpl.fromJson;
+
+  @override
+  int get orderGroupNum;
+  @override
+  int get tableNum;
+  @override
+  int get totalOrderPrice;
+  @override
+  List<Order> get orders;
+  @override
+  @JsonKey(ignore: true)
+  _$$OrderGroupImplCopyWith<_$OrderGroupImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

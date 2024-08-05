@@ -1,21 +1,39 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'order_model.dart';
+part of 'grouped_tables_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$OrderResponseImpl _$$OrderResponseImplFromJson(Map<String, dynamic> json) =>
-    _$OrderResponseImpl(
+_$TableResponseImpl _$$TableResponseImplFromJson(Map<String, dynamic> json) =>
+    _$TableResponseImpl(
       data: (json['data'] as List<dynamic>)
+          .map((e) => OrderGroup.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$$TableResponseImplToJson(_$TableResponseImpl instance) =>
+    <String, dynamic>{
+      'data': instance.data,
+    };
+
+_$OrderGroupImpl _$$OrderGroupImplFromJson(Map<String, dynamic> json) =>
+    _$OrderGroupImpl(
+      orderGroupNum: (json['orderGroupNum'] as num).toInt(),
+      tableNum: (json['tableNum'] as num).toInt(),
+      totalOrderPrice: (json['totalOrderPrice'] as num).toInt(),
+      orders: (json['orders'] as List<dynamic>)
           .map((e) => Order.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
-Map<String, dynamic> _$$OrderResponseImplToJson(_$OrderResponseImpl instance) =>
+Map<String, dynamic> _$$OrderGroupImplToJson(_$OrderGroupImpl instance) =>
     <String, dynamic>{
-      'data': instance.data,
+      'orderGroupNum': instance.orderGroupNum,
+      'tableNum': instance.tableNum,
+      'totalOrderPrice': instance.totalOrderPrice,
+      'orders': instance.orders,
     };
 
 _$OrderImpl _$$OrderImplFromJson(Map<String, dynamic> json) => _$OrderImpl(
