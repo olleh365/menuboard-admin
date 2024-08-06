@@ -9,6 +9,7 @@ part 'menu_network.g.dart';
 abstract class MenuNetwork {
   factory MenuNetwork(Dio dio, {String baseUrl}) = _MenuNetwork;
 
+
   @GET("/orders")
   Future<OrderResponse> getOrders(
       @Query("storeSeq") int storeSeq,

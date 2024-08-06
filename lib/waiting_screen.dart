@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'menu_network.dart';
-import 'storeState.dart';
+import 'store_provider.dart';
 import 'package:dio/dio.dart';
 import 'order_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'refresh_provider.dart';
 
 
 class WaitingScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class WaitingScreen extends StatefulWidget {
   WaitingScreenState createState() => WaitingScreenState();
 }
 
-class WaitingScreenState extends State<WaitingScreen> {
+class WaitingScreenState extends State<WaitingScreen> with AutomaticKeepAliveClientMixin {
   late MenuNetwork _menuNetwork;
   List<Order> _orders = [];
 
@@ -39,6 +40,18 @@ class WaitingScreenState extends State<WaitingScreen> {
       debugPrint('Error fetching orders: $e');
     }
   }
+
+  @override
+  // 데이터 의존하는 위젯
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final refreshNotifier = Provider.of<RefreshNotifier>(context, listen: false);
+    refreshNotifier.addListener(() {
+      // microtask를 사용하여 setState 호출을 미루기 (큐)
+      Future.microtask(() => _fetchOrders());
+    });
+  }
+
   void _cancelOrderItem(int orderSeq, int orderMenuSeq) async {
     try {
       await _menuNetwork.deleteMenu(orderSeq, orderMenuSeq);
@@ -114,6 +127,7 @@ class WaitingScreenState extends State<WaitingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return ListView.builder(
       itemCount: _orders.length,
       itemBuilder: (context, index) {
@@ -247,4 +261,6 @@ class WaitingScreenState extends State<WaitingScreen> {
       },
     );
   }
+  @override
+  bool get wantKeepAlive => true;
 }

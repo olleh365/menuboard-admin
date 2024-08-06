@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'order_provider.dart';
+import 'exam_order_provider.dart';
 
 class KitchenScreen extends StatefulWidget {
   const KitchenScreen({super.key});
@@ -14,7 +14,7 @@ class KitchenScreenState extends State<KitchenScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final orders = Provider.of<OrderProvider>(context).approvedOrders;
+    final orders = Provider.of<ExamOrderProvider>(context).approvedOrders;
     // 각 오더의 주문 목록 호출 (orderItems 리스트 변수에 Order.items 리스트를 결합하여 저장함)
     final orderItems = orders.expand((order) => order.items).toList();
 

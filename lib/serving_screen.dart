@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'order_provider.dart';
+import 'exam_order_provider.dart';
 
 class ServingScreen extends StatefulWidget {
   const ServingScreen({super.key});
@@ -16,7 +16,7 @@ class ServingScreenState extends State<ServingScreen> {
   @override
   Widget build(BuildContext context) {
     // 승인된 주문 테이블 영역
-    final orders = Provider.of<OrderProvider>(context).approvedOrders;
+    final orders = Provider.of<ExamOrderProvider>(context).approvedOrders;
     return ListView.builder(
       itemCount: orders.length,
       itemBuilder: (context, index) {

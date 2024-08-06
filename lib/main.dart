@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:menuboard_admin/order_provider.dart';
 import 'package:provider/provider.dart';
 import 'waiting_screen.dart';
 import 'kitchen_screen.dart';
 import 'serving_screen.dart';
 import 'status_screen.dart';
-import 'storeState.dart';
+import 'store_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:dio/dio.dart';
+import 'package:menuboard_admin/exam_order_provider.dart';
+import 'refresh_provider.dart';
+
 
 
 Future main() async{
   await dotenv.load(fileName: ".env");
+  // final dio = Dio();
+  // dio.options.headers['Authorization'] = dotenv.env['API_AUTH_TOKEN'];
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => StoreState()),
-        ChangeNotifierProvider(create: (_) => OrderProvider()),
+        ChangeNotifierProvider(create: (_) => ExamOrderProvider()),
+        ChangeNotifierProvider(create: (_) => RefreshNotifier()),
       ],
       child: const MyApp(),
     ),
@@ -98,7 +104,9 @@ class MyApp extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: TextButton(
-                    onPressed: toastExample,
+                    onPressed:(){
+                      Provider.of<RefreshNotifier>(context, listen: false).refresh();
+                    },
                     style: TextButton.styleFrom(
                       textStyle: const TextStyle(
                           fontSize: 14, fontWeight: FontWeight.w700),

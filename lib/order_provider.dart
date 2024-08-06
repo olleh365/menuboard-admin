@@ -1,94 +1,40 @@
-import 'package:flutter/material.dart';
-import 'exam_menu_model.dart';
+import 'package:flutter/foundation.dart';
+import 'package:dio/dio.dart';
+import 'package:menuboard_admin/menu_network.dart';
+import 'order_model.dart';
+import 'grouped_tables_model.dart' as grouped_tables;
 
-class OrderProvider extends ChangeNotifier {
-  final List<Order> _orders = [
-    Order(
-      orderNumber: '00001111',
-      orderTime: DateTime.now(),
-      tableNumber: 5,
-      items: [
-        OrderItem(
-          mainMenu: '반건조오징어',
-          mainMenuPrice: 12000,
-          additionalMenu: [
-            AdditionalMenuItem(name: '땅콩', price: 1000),
-            AdditionalMenuItem(name: '마요네즈', price: 2000),
-          ],
-          quantity: 1,
-        ),
-        OrderItem(
-          mainMenu: '감자튀김',
-          mainMenuPrice: 14000,
-          additionalMenu: [
-            AdditionalMenuItem(name: '케찹', price: 2000),
-            AdditionalMenuItem(name: '머스타드', price: 3000),
-          ],
-          quantity: 2,
-        ),
-        OrderItem(
-          mainMenu: '탕후루',
-          mainMenuPrice: 2000,
-          additionalMenu: [
-            AdditionalMenuItem(name: '귤', price: 1000),
-            AdditionalMenuItem(name: '포도', price: 1000),
-          ],
-          quantity: 2,
-        ),
-        OrderItem(
-          mainMenu: '탕후루',
-          mainMenuPrice: 2000,
-          additionalMenu: [
-            AdditionalMenuItem(name: '귤', price: 1000),
-            AdditionalMenuItem(name: '포도', price: 1000),
-          ],
-          quantity: 2,
-        ),
-        OrderItem(
-          mainMenu: '탕후루',
-          mainMenuPrice: 2000,
-          additionalMenu: [
-            AdditionalMenuItem(name: '귤', price: 1000),
-            AdditionalMenuItem(name: '포도', price: 1000),
-          ],
-          quantity: 2,
-        ),
-        OrderItem(
-          mainMenu: '탕후루',
-          mainMenuPrice: 2000,
-          additionalMenu: [
-            AdditionalMenuItem(name: '귤', price: 1000),
-            AdditionalMenuItem(name: '포도', price: 1000),
-          ],
-          quantity: 2,
-        ),
-      ],
-    ),
-    Order(
-      orderNumber: '00002222',
-      orderTime: DateTime.now(),
-      tableNumber: 3,
-      items: [
-        OrderItem(
-          mainMenu: '돈까스',
-          mainMenuPrice: 12000,
-          additionalMenu: [
-            AdditionalMenuItem(name: '샐러드', price: 4000),
-          ],
-          quantity: 1,
-        ),
-      ],
-    ),
-  ];
+class OrderProvider with ChangeNotifier {
+  final MenuNetwork _menuNetwork;
+  List<Order> waitingOrders = [];
+  List<grouped_tables.OrderGroup> statusOrders = [];
 
-  List<Order> get orders => _orders;
+  OrderProvider(this._menuNetwork);
 
-  // 주문 승인된 목록리스트
-  final List<Order> approvedOrders = [];
-
-  void approveOrder(Order order) {
-    approvedOrders.add(order);
-    _orders.remove(order);
+  Future<void> fetchAllOrders(int storeSeq, String date) async {
+    await Future.wait([
+      fetchWaitingOrders(storeSeq, date),
+      fetchStatusOrders(storeSeq, date),
+    ]);
     notifyListeners();
+  }
+
+  Future<void> fetchWaitingOrders(int storeSeq, String date) async {
+    try {
+      final response = await _menuNetwork.getOrders(storeSeq, date);
+      waitingOrders = response.data;
+    } catch (e) {
+      debugPrint('Error fetching waiting orders: $e');
+    }
+  }
+
+
+  Future<void> fetchStatusOrders(int storeSeq, String date) async {
+    try {
+      final response = await _menuNetwork.getOrderGroups(storeSeq, date);
+      statusOrders = response.data;
+    } catch (e) {
+      debugPrint('Error fetching status orders: $e');
+    }
   }
 }

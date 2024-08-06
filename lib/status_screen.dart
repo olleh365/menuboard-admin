@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:menuboard_admin/menu_network.dart';
-import 'package:menuboard_admin/storeState.dart';
+import 'package:menuboard_admin/store_provider.dart';
 import 'main.dart';
 import 'package:dio/dio.dart';
 import 'grouped_tables_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'refresh_provider.dart';
 
 
 class StatusScreen extends StatefulWidget {
@@ -42,10 +43,17 @@ class StatusScreenState extends State<StatusScreen> {
     }
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final refreshNotifier = Provider.of<RefreshNotifier>(context, listen: false);
+    refreshNotifier.addListener(() {
+      Future.microtask(() => _fetchOrderData());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-
     // 테이블 영역 카드 UI
     return GridView.builder(
       padding: const EdgeInsets.all(8.0),
