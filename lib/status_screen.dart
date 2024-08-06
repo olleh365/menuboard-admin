@@ -18,13 +18,13 @@ class StatusScreen extends StatefulWidget {
 class StatusScreenState extends State<StatusScreen> {
   var f = NumberFormat('###,###,###,###');
   late final MenuNetwork _menuNetwork;
-  TableResponse? _orderResponse;
+  List<OrderGroup> _orderGroups = [];
 
   @override
   void initState() {
     super.initState();
     final dio = Dio();
-    dio.options.headers['Authorization'] = 'Bearer ..';
+    dio.options.headers['Authorization'] = 'Bearer ..--4';
     _menuNetwork = MenuNetwork(dio);
     _fetchOrderData();
   }
@@ -34,7 +34,7 @@ class StatusScreenState extends State<StatusScreen> {
       final storeState = Provider.of<StoreState>(context, listen: false);
       final response = await _menuNetwork.getOrderGroups(storeState.storeSeq, storeState.date);
       setState(() {
-        _orderResponse = response;
+        _orderGroups = response.data;
       });
     } catch (e) {
       debugPrint('Error fetching orders: $e');
@@ -44,9 +44,6 @@ class StatusScreenState extends State<StatusScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_orderResponse == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
 
     // 테이블 영역 카드 UI
     return GridView.builder(
@@ -61,7 +58,7 @@ class StatusScreenState extends State<StatusScreen> {
       itemCount: 8,
       itemBuilder: (context, index) {
         final tableNumber = index + 1;
-        final orderGroup = _orderResponse!.data.firstWhere(
+        final orderGroup = _orderGroups.firstWhere(
               (og) => og.tableNum == tableNumber,
           orElse: () => OrderGroup(
             orderGroupNum: -1,

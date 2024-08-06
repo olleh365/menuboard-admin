@@ -22,7 +22,7 @@ class WaitingScreenState extends State<WaitingScreen> {
   void initState() {
     super.initState();
     final dio = Dio();
-    dio.options.headers['Authorization'] = 'Bearer ..';
+    dio.options.headers['Authorization'] = 'Bearer ..--4';
     _menuNetwork = MenuNetwork(dio);
     _fetchOrders();
   }
@@ -38,8 +38,17 @@ class WaitingScreenState extends State<WaitingScreen> {
       debugPrint('Error fetching orders: $e');
     }
   }
+  void _cancelOrderItem(int orderSeq, int orderMenuSeq) async {
+    try {
+      await _menuNetwork.deleteMenu(orderSeq, orderMenuSeq);
+      // 업데이트
+      _fetchOrders();
+    } catch (e) {
+      debugPrint('Error deleting menu item: $e');
+    }
+  }
 
-  void cancelWindow(BuildContext context, Menu item) {
+  void cancelWindow(BuildContext context, int orderItem ,Menu item) {
     var f = NumberFormat('###,###,###,###');
     final additionalMenu =
         item.selectedOptions.map((addItem) => addItem.menuOptionName).join('/');
@@ -83,6 +92,7 @@ class WaitingScreenState extends State<WaitingScreen> {
               TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
+                    _cancelOrderItem(orderItem ,item.orderMenuSeq);
                   },
                   style: TextButton.styleFrom(
                       backgroundColor: const Color(0xFFFF662B),
@@ -192,7 +202,7 @@ class WaitingScreenState extends State<WaitingScreen> {
                                       color: Colors.black),
                                 ),
                                 Text(
-                                  '${item.selectedOptions.map((addItem) => addItem.menuOptionName).join(' / 추가 ')} 추가',
+                                  item.selectedOptions.map((addItem) => addItem.menuOptionName).join(' / 추가 '),
                                   style: const TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w500,
@@ -211,7 +221,7 @@ class WaitingScreenState extends State<WaitingScreen> {
                               height: 24,
                               child: TextButton(
                                   onPressed: () {
-                                    cancelWindow(context, item);
+                                    cancelWindow(context,order.orderSeq ,item);
                                   },
                                   style: TextButton.styleFrom(
                                       backgroundColor: const Color(0xFFF5F5F5),
