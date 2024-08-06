@@ -6,6 +6,7 @@ import 'main.dart';
 import 'package:dio/dio.dart';
 import 'grouped_tables_model.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 
 class StatusScreen extends StatefulWidget {
@@ -24,7 +25,7 @@ class StatusScreenState extends State<StatusScreen> {
   void initState() {
     super.initState();
     final dio = Dio();
-    dio.options.headers['Authorization'] = 'Bearer ..--4';
+    dio.options.headers['Authorization'] = dotenv.env['API_AUTH_TOKEN'];
     _menuNetwork = MenuNetwork(dio);
     _fetchOrderData();
   }

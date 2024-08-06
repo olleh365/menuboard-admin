@@ -5,6 +5,7 @@ import 'menu_network.dart';
 import 'storeState.dart';
 import 'package:dio/dio.dart';
 import 'order_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 
 class WaitingScreen extends StatefulWidget {
@@ -22,7 +23,7 @@ class WaitingScreenState extends State<WaitingScreen> {
   void initState() {
     super.initState();
     final dio = Dio();
-    dio.options.headers['Authorization'] = 'Bearer ..--4';
+    dio.options.headers['Authorization'] = dotenv.env['API_AUTH_TOKEN'];
     _menuNetwork = MenuNetwork(dio);
     _fetchOrders();
   }
