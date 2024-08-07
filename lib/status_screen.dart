@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:menuboard_admin/menu_network.dart';
 import 'package:menuboard_admin/store_provider.dart';
-import 'main.dart';
 import 'package:dio/dio.dart';
 import 'grouped_tables_model.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'refresh_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 
 class StatusScreen extends StatefulWidget {
   const StatusScreen({super.key});
@@ -35,19 +33,22 @@ class StatusScreenState extends State<StatusScreen> {
   Future<void> _fetchOrderData() async {
     try {
       final storeState = Provider.of<StoreState>(context, listen: false);
-      final response = await _menuNetwork.getOrderGroups(storeState.storeSeq, storeState.date);
+      TableResponse tableResponse = await _menuNetwork.getOrderGroups(
+          storeState.storeSeq, storeState.date);
       setState(() {
-        _orderGroups = response.data;
+        _orderGroups = tableResponse.data;
       });
     } catch (e) {
       debugPrint('Error fetching orders: $e');
     }
   }
 
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final refreshNotifier = Provider.of<RefreshNotifier>(context, listen: false);
+    final refreshNotifier =
+        Provider.of<RefreshNotifier>(context, listen: false);
     refreshNotifier.addListener(() {
       Future.microtask(() => _fetchOrderData());
     });
@@ -69,7 +70,7 @@ class StatusScreenState extends State<StatusScreen> {
       itemBuilder: (context, index) {
         final tableNumber = index + 1;
         final orderGroup = _orderGroups.firstWhere(
-              (og) => og.tableNum == tableNumber,
+          (og) => og.tableNum == tableNumber,
           orElse: () => OrderGroup(
             orderGroupNum: -1,
             tableNum: tableNumber,
@@ -106,7 +107,9 @@ class StatusScreenState extends State<StatusScreen> {
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w700,
-                                  color: orders.isEmpty ? const Color(0xFF777777) : const Color(0xFFFF662B),
+                                  color: orders.isEmpty
+                                      ? const Color(0xFF777777)
+                                      : const Color(0xFFFF662B),
                                 ),
                               ),
                             ],
@@ -117,7 +120,7 @@ class StatusScreenState extends State<StatusScreen> {
                               height: 24,
                               child: TextButton(
                                   onPressed: () {
-                                  // 테이블 리셋 토스트 팝업
+                                    // 테이블 리셋 토스트 팝업
                                     Fluttertoast.showToast(
                                       msg: '테이블 $tableNumber이 리셋되었습니다',
                                       toastLength: Toast.LENGTH_SHORT,
@@ -153,7 +156,9 @@ class StatusScreenState extends State<StatusScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    order.menuList.map((menu)=> menu.menuName).join(', '),
+                                    order.menuList
+                                        .map((menu) => menu.menuName)
+                                        .join(', '),
                                     style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w600,
@@ -162,7 +167,7 @@ class StatusScreenState extends State<StatusScreen> {
                                 ],
                               ),
                               Text(
-                                '${order.menuList.map((menu) => menu.quantity).reduce((a,b)=> a + b)}개',
+                                '${order.menuList.map((menu) => menu.quantity).reduce((a, b) => a + b)}개',
                                 style: const TextStyle(
                                     color: Color(0xFFAAAAAA),
                                     fontWeight: FontWeight.w500,
@@ -242,10 +247,11 @@ class StatusScreenState extends State<StatusScreen> {
                             Text(
                               '테이블 ${orderGroup.tableNum}',
                               style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                                color: orderGroup.orders.isEmpty ? const Color(0xFF777777) : const Color(0xFFFF662B)
-                              ),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                  color: orderGroup.orders.isEmpty
+                                      ? const Color(0xFF777777)
+                                      : const Color(0xFFFF662B)),
                             ),
                             IconButton(
                               icon: const Icon(Icons.close),
@@ -262,121 +268,173 @@ class StatusScreenState extends State<StatusScreen> {
                         thickness: 1,
                       ),
                       // 주문 상태, 주문 번호, 시간 영역 UI
-                      Container(
-                        color: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              '현재 주문중',
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xFFFF662B)),
-                            ),
-                            ...orderGroup.orders.map((order) {
-                              final formattedTime = DateFormat('HH:mm').format(order.orderDate);
-                              return Column(
-                                children: [
-                                  Row(
+                      Expanded(
+                          child: orderGroup.orders.isEmpty ?
+                              const Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: 36,
+                                      height: 36,
+                                      child: Placeholder(),
+                                    ),
+                                    SizedBox(height: 8),
+                                    Text('현재 주문내역이 없어요',style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                                  ],
+                                )
+                              )
+                              : ListView.builder(
+                              itemCount: orderGroup.orderGroupNum,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  color: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8, horizontal: 16),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        '주문번호 ${order.orderNum}',
-                                        style: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500),
+                                      const Text(
+                                        '현재 주문중',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xFFFF662B)),
                                       ),
-                                      Text(
-                                        ' ($formattedTime)',
-                                        style: const TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w500,
-                                          color: Color(0xFF777777),
+                                      ...orderGroup.orders.map((order) {
+                                        final formattedTime =
+                                            DateFormat('HH:mm')
+                                                .format(order.orderDate);
+                                        return Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  '주문번호 ${order.orderNum}',
+                                                  style: const TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                                Text(
+                                                  ' ($formattedTime)',
+                                                  style: const TextStyle(
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.w500,
+                                                    color: Color(0xFF777777),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            ...order.menuList.map((menu) =>
+                                                Column(children: [
+                                                  const SizedBox(
+                                                    height: 4,
+                                                  ),
+                                                  Container(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 16,
+                                                        vertical: 8),
+                                                    width: 400,
+                                                    decoration: BoxDecoration(
+                                                      color: const Color(
+                                                          0xFFF5F5F5),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                    ),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          '${menu.menuName}, ${menu.quantity}개',
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  color: Colors
+                                                                      .black),
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Text(
+                                                              menu.selectedOptions
+                                                                  .map((option) =>
+                                                                      option
+                                                                          .menuOptionName)
+                                                                  .join(' / '),
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 13,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                color: Color(
+                                                                    0xFF777777),
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              '${f.format(menu.menuTotalPrice)}원',
+                                                              style: const TextStyle(
+                                                                  color: Color(
+                                                                      0xFF777777),
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                                ])),
+                                            const SizedBox(height: 16,)
+                                          ],
+                                        );
+                                      }),
+
+                                      const SizedBox(height: 8),
+                                      // 점선 부터 총 금액 영역 UI
+                                      CustomPaint(
+                                        painter: DotDivider(),
+                                        size: const Size(double.infinity, 3),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16, vertical: 16),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                              '총 금액',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            Text(
+                                              '${f.format(orderGroup.totalOrderPrice)}원',
+                                              style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w700),
+                                            )
+                                          ],
                                         ),
-                                      ),
+                                      )
                                     ],
                                   ),
-                                  ...order.menuList.map((menu) => Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 8),
-                                    width: 400,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFF5F5F5),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            '${menu.menuName}, ${menu.quantity}개',
-                                            style: const TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w700,
-                                                color: Colors.black),
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                menu.selectedOptions.map((option) => option.menuOptionName).join(' / '),
-                                                style: const TextStyle(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Color(0xFF777777),
-                                                ),
-                                              ),
-                                              Text(
-                                                '${f.format(menu.menuTotalPrice)}원',
-                                                style: const TextStyle(
-                                                    color: Color(0xFF777777),
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                    FontWeight.w600),
-                                              )
-                                            ],
-                                          ),
-                                        ],
-                                    ),
-                                  )),
-                                ],
-                              );
-                            }),
-
-                            const SizedBox(height: 8),
-                            // 점선 부터 총 금액 영역 UI
-                            CustomPaint(
-                              painter: DotDivider(),
-                              size: const Size(double.infinity, 3),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 16),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    '총 금액',
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  Text(
-                                    '${f.format(orderGroup.totalOrderPrice)}원',
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      )
+                                );
+                              }))
                     ],
                   ),
                 )),

@@ -16,14 +16,15 @@ abstract class MenuNetwork {
       @Query("date") String date,
       );
 
-  @DELETE("/orders/{orderSeq}/{orderMenuSeq}")
-  Future<void> deleteMenu(
-      @Path("orderSeq") int orderSeq,
-      @Path("orderMenuSeq") int orderMenuSeq,
+  @GET("/orders/grouped-tables")
+  Future<TableResponse> getOrderGroups(
+      @Query("storeSeq") int storeSeq,
+      @Query("date") String date,
       );
 
-  @GET("orders/grouped-tables")
-  Future<TableResponse> getOrderGroups(
+  @GET("/orders/table-orders")
+  Future<TableResponse> getTableOrders(
+      @Query("tableNum") int tableNum,
       @Query("storeSeq") int storeSeq,
       @Query("date") String date,
       );
@@ -32,4 +33,11 @@ abstract class MenuNetwork {
   Future<void> updateMenu(
       @Path("orderSeq") int orderSeq,
       );
+
+  @DELETE("/orders/{orderSeq}/{orderMenuSeq}")
+  Future<void> deleteMenu(
+      @Path("orderSeq") int orderSeq,
+      @Path("orderMenuSeq") int orderMenuSeq,
+      );
 }
+

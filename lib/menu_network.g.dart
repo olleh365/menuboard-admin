@@ -54,33 +54,6 @@ class _MenuNetwork implements MenuNetwork {
   }
 
   @override
-  Future<void> deleteMenu(
-    int orderSeq,
-    int orderMenuSeq,
-  ) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
-    await _dio.fetch<void>(_setStreamType<void>(Options(
-      method: 'DELETE',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          '/orders/${orderSeq}/${orderMenuSeq}',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(
-            baseUrl: _combineBaseUrls(
-          _dio.options.baseUrl,
-          baseUrl,
-        ))));
-  }
-
-  @override
   Future<TableResponse> getOrderGroups(
     int storeSeq,
     String date,
@@ -100,7 +73,42 @@ class _MenuNetwork implements MenuNetwork {
     )
             .compose(
               _dio.options,
-              'orders/grouped-tables',
+              '/orders/grouped-tables',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    final _value = TableResponse.fromJson(_result.data!);
+    return _value;
+  }
+
+  @override
+  Future<TableResponse> getTableOrders(
+    int tableNum,
+    int storeSeq,
+    String date,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'tableNum': tableNum,
+      r'storeSeq': storeSeq,
+      r'date': date,
+    };
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<TableResponse>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/orders/table-orders',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -127,6 +135,33 @@ class _MenuNetwork implements MenuNetwork {
         .compose(
           _dio.options,
           '/orders/${orderSeq}/update-status',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+  }
+
+  @override
+  Future<void> deleteMenu(
+    int orderSeq,
+    int orderMenuSeq,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    await _dio.fetch<void>(_setStreamType<void>(Options(
+      method: 'DELETE',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/orders/${orderSeq}/${orderMenuSeq}',
           queryParameters: queryParameters,
           data: _data,
         )

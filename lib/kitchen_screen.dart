@@ -33,7 +33,7 @@ class KitchenScreenState extends State<KitchenScreen> {
   Future<void> _fetchOrders() async {
     final storeState = Provider.of<StoreState>(context, listen: false);
     try {
-      final response = await _menuNetwork.getOrders(storeState.storeSeq, storeState.date);
+      OrderResponse response = await _menuNetwork.getOrders(storeState.storeSeq, storeState.date);
       setState(() {
         _acceptedOrders = response.data.where((order) => order.orderStatus == 'ACCEPTED' || order.orderStatus == 'COOKED' || order.orderStatus == 'SERVED').toList();
       });

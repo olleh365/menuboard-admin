@@ -33,7 +33,7 @@ class WaitingScreenState extends State<WaitingScreen> with AutomaticKeepAliveCli
   Future<void> _fetchOrders() async {
     final storeState = Provider.of<StoreState>(context, listen: false);
     try {
-      final response = await _menuNetwork.getOrders(storeState.storeSeq, storeState.date);
+      OrderResponse response = await _menuNetwork.getOrders(storeState.storeSeq, storeState.date);
       setState(() {
         _orders = response.data.where((order) => order.orderStatus == 'WAIT').toList();
       });
