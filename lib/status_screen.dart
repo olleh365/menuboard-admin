@@ -285,7 +285,7 @@ class StatusScreenState extends State<StatusScreen> {
                                 )
                               )
                               : ListView.builder(
-                              itemCount: orderGroup.orderGroupNum,
+                              itemCount: 1,
                               itemBuilder: (context, index) {
                                 return Container(
                                   color: Colors.white,

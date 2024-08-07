@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -20,6 +21,7 @@ class WaitingScreen extends StatefulWidget {
 class WaitingScreenState extends State<WaitingScreen> with AutomaticKeepAliveClientMixin {
   late MenuNetwork _menuNetwork;
   List<Order> _orders = [];
+  Timer? _timer;
 
   @override
   void initState() {
@@ -28,6 +30,19 @@ class WaitingScreenState extends State<WaitingScreen> with AutomaticKeepAliveCli
     dio.options.headers['Authorization'] = dotenv.env['API_AUTH_TOKEN'];
     _menuNetwork = MenuNetwork(dio);
     _fetchOrders();
+    _startPolling();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _startPolling() {
+    _timer = Timer.periodic(Duration(seconds: 10), (timer) {
+      _fetchOrders();
+    });
   }
 
   Future<void> _fetchOrders() async {
