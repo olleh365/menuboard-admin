@@ -16,6 +16,7 @@ class WaitingScreen extends StatefulWidget {
   WaitingScreenState createState() => WaitingScreenState();
 }
 
+// AutomaticKeepAliveClientMixin 통한 불필요한 랜더링 제거
 class WaitingScreenState extends State<WaitingScreen> with AutomaticKeepAliveClientMixin {
   late MenuNetwork _menuNetwork;
   List<Order> _orders = [];
@@ -34,7 +35,7 @@ class WaitingScreenState extends State<WaitingScreen> with AutomaticKeepAliveCli
     try {
       final response = await _menuNetwork.getOrders(storeState.storeSeq, storeState.date);
       setState(() {
-        _orders = response.data;
+        _orders = response.data.where((order) => order.orderStatus == 'WAIT').toList();
       });
     } catch (e) {
       debugPrint('Error fetching orders: $e');
@@ -52,13 +53,22 @@ class WaitingScreenState extends State<WaitingScreen> with AutomaticKeepAliveCli
     });
   }
 
+  void _updateOrderItem(int orderSeq) async {
+    try{
+      await _menuNetwork.updateMenu(orderSeq);
+      _fetchOrders();
+    } catch (e) {
+      debugPrint('Error updating Function: $e');
+    }
+  }
+
   void _cancelOrderItem(int orderSeq, int orderMenuSeq) async {
     try {
       await _menuNetwork.deleteMenu(orderSeq, orderMenuSeq);
       // 업데이트
       _fetchOrders();
     } catch (e) {
-      debugPrint('Error deleting menu item: $e');
+      debugPrint('Error deleting Function: $e');
     }
   }
 
@@ -180,7 +190,7 @@ class WaitingScreenState extends State<WaitingScreen> with AutomaticKeepAliveCli
                             height: 24,
                             child: TextButton(
                                 onPressed: () {
-
+                                  _updateOrderItem(order.orderSeq);
                                 },
                                 style: TextButton.styleFrom(
                                   backgroundColor: const Color(0xFFFF662B),

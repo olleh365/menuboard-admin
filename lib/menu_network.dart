@@ -28,4 +28,8 @@ abstract class MenuNetwork {
       @Query("date") String date,
       );
 
+  @PUT("/orders/{orderSeq}/update-status")
+  Future<void> updateMenu(
+      @Path("orderSeq") int orderSeq,
+      );
 }
