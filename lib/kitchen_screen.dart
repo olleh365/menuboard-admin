@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'order_model.dart';
 import 'store_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'refresh_provider.dart';
 
 
 class KitchenScreen extends StatefulWidget {
@@ -28,17 +29,38 @@ class KitchenScreenState extends State<KitchenScreen> {
     _fetchOrders();
   }
 
+
   Future<void> _fetchOrders() async {
     final storeState = Provider.of<StoreState>(context, listen: false);
     try {
       final response = await _menuNetwork.getOrders(storeState.storeSeq, storeState.date);
       setState(() {
-        _acceptedOrders = response.data.where((order) => order.orderStatus == 'ACCEPTED').toList();
+        _acceptedOrders = response.data.where((order) => order.orderStatus != 'WAIT').toList();
       });
     } catch (e) {
       debugPrint('Error fetching orders: $e');
     }
   }
+
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final refreshNotifier = Provider.of<RefreshNotifier>(context, listen: false);
+    refreshNotifier.addListener(() {
+      Future.microtask(() => _fetchOrders());
+    });
+  }
+
+  void _updateOrderItem(int orderSeq) async {
+    try{
+      await _menuNetwork.updateMenu(orderSeq);
+      _fetchOrders();
+    } catch (e) {
+      debugPrint('Error updating Function: $e');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {

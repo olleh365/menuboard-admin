@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-import 'exam_order_provider.dart';
+import 'order_model.dart';
+import 'menu_network.dart';
+import 'package:dio/dio.dart';
+import 'refresh_provider.dart';
+import 'store_provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+
+
+
 
 class ServingScreen extends StatefulWidget {
   const ServingScreen({super.key});
@@ -11,17 +20,51 @@ class ServingScreen extends StatefulWidget {
 }
 
 class ServingScreenState extends State<ServingScreen> {
+  late MenuNetwork _menuNetwork;
+  List<Order> _acceptedOrders = [];
   final Map<int, Map<int, bool>> _checkedItems = {};
 
   @override
+  void initState() {
+    super.initState();
+    final dio = Dio();
+    dio.options.headers['Authorization'] = dotenv.env['API_AUTH_TOKEN'];
+    _menuNetwork = MenuNetwork(dio);
+    _fetchOrders();
+  }
+
+
+  Future<void> _fetchOrders() async {
+    final storeState = Provider.of<StoreState>(context, listen: false);
+    try {
+      final response = await _menuNetwork.getOrders(storeState.storeSeq, storeState.date);
+      setState(() {
+        _acceptedOrders = response.data.where((order) => order.orderStatus != 'WAIT').toList();
+      });
+    } catch (e) {
+      debugPrint('Error fetching orders: $e');
+    }
+  }
+
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final refreshNotifier = Provider.of<RefreshNotifier>(context, listen: false);
+    refreshNotifier.addListener(() {
+      Future.microtask(() => _fetchOrders());
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     // 승인된 주문 테이블 영역
-    final orders = Provider.of<ExamOrderProvider>(context).approvedOrders;
     return ListView.builder(
-      itemCount: orders.length,
+      itemCount: _acceptedOrders.length,
       itemBuilder: (context, index) {
-        final order = orders[index];
-        final formattedTime = DateFormat('HH:mm').format(order.orderTime);
+        final order = _acceptedOrders[index];
+        final formattedTime = DateFormat('HH:mm').format(order.orderDate);
         return Column(
           children: [
             const SizedBox(height: 8),
@@ -40,7 +83,7 @@ class ServingScreenState extends State<ServingScreen> {
                           //
                           children: [
                             Text(
-                              order.orderNumber,
+                              order.orderNum,
                               style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -55,7 +98,7 @@ class ServingScreenState extends State<ServingScreen> {
                               ),
                             ),
                             Text(
-                              ' | 테이블 ${order.tableNumber}',
+                              ' | 테이블 ${order.tableNum}',
                               style: const TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500,
@@ -77,8 +120,8 @@ class ServingScreenState extends State<ServingScreen> {
                                             .every((checked) => checked) ??
                                         false;
                                     _checkedItems[index] = Map.fromEntries(
-                                      order.items.map((item) => MapEntry(
-                                          order.items.indexOf(item),
+                                      order.menuList.map((item) => MapEntry(
+                                          order.menuList.indexOf(item),
                                           !allChecked)),
                                     );
                                   });
@@ -101,8 +144,8 @@ class ServingScreenState extends State<ServingScreen> {
                     color: Color(0xFFF5F5F5),
                   ),
                   // 승인된 주문 목록리스트 UI
-                  ...order.items.map((item) {
-                    final itemIndex = order.items.indexOf(item);
+                  ...order.menuList.map((item) {
+                    final itemIndex = order.menuList.indexOf(item);
                     final isChecked = _checkedItems[index]?[itemIndex] ?? false;
 
                     return Padding(
@@ -115,7 +158,7 @@ class ServingScreenState extends State<ServingScreen> {
                             children: [
                               const SizedBox(height: 8),
                               Text(
-                                '${item.mainMenu}, ${item.quantity}개',
+                                '${item.menuName}, ${item.quantity}개',
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
@@ -124,7 +167,7 @@ class ServingScreenState extends State<ServingScreen> {
                                 ),
                               ),
                               Text(
-                                '${item.additionalMenu.map((addItem) => addItem.name).join(' 추가 / ')} 추가',
+                                item.selectedOptions.map((addItem) => addItem.menuOptionName).join(' 추가 / '),
                                 style: TextStyle(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w500,
