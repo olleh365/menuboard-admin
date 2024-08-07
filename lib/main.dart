@@ -29,7 +29,7 @@ Future main() async{
   );
 }
 
-// 임시 토스트 팝업 삭제해야함.
+// 테이블 리셋 토스트 팝업
 void toastExample() {
   Fluttertoast.showToast(
     msg: "새로고침 되었습니다.",

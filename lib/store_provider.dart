@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class StoreState extends ChangeNotifier {
   int _storeSeq = 16;
-  String _date = '20240806';
+  String _date = '20240807';
 
   int get storeSeq => _storeSeq;
   String get date => _date;

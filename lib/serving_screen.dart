@@ -39,7 +39,7 @@ class ServingScreenState extends State<ServingScreen> {
     try {
       final response = await _menuNetwork.getOrders(storeState.storeSeq, storeState.date);
       setState(() {
-        _acceptedOrders = response.data.where((order) => order.orderStatus != 'WAIT').toList();
+        _acceptedOrders = response.data.where((order) => order.orderStatus == 'ACCEPTED' || order.orderStatus == 'COOKED' || order.orderStatus == 'SERVED').toList();
       });
     } catch (e) {
       debugPrint('Error fetching orders: $e');
