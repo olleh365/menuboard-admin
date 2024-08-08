@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -159,6 +160,7 @@ class WaitingScreenState extends State<WaitingScreen> with AutomaticKeepAliveCli
         final order = _orders[index];
         final formattedTime = DateFormat('HH:mm').format(order.orderDate);
         return Column(
+          verticalDirection: VerticalDirection.down,
           children: [
             const SizedBox(height: 8),
             Container(
