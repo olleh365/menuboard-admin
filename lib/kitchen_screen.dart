@@ -52,19 +52,20 @@ class KitchenScreenState extends State<KitchenScreen> {
     });
   }
 
-  void _updateOrderItem(int orderSeq) async {
-    try{
-      await _menuNetwork.updateMenu(orderSeq);
-      _fetchOrders();
-    } catch (e) {
-      debugPrint('Error updating Function: $e');
-    }
-  }
+  // void _updateOrderItem(int orderSeq) async {
+  //   try{
+  //     await _menuNetwork.updateMenu(orderSeq);
+  //     _fetchOrders();
+  //   } catch (e) {
+  //     debugPrint('Error updating Function: $e');
+  //   }
+  // }
 
 
   @override
   Widget build(BuildContext context) {
     // 각 오더의 주문 목록 호출 (orderItems 리스트 변수에 Order.items 리스트를 결합하여 저장함)
+
     final orderItems = _acceptedOrders.expand((order) => order.menuList).toList();
 
     // 승인된 주문메뉴 리스트
@@ -72,6 +73,7 @@ class KitchenScreenState extends State<KitchenScreen> {
       itemCount: orderItems.length,
       itemBuilder: (context, index) {
         final orderItem = orderItems[index];
+        final order = _acceptedOrders.firstWhere((order) => order.menuList.contains(orderItem));
         final isChecked = _checkedItems[index] ?? false;
         return Column(
           children: [
@@ -89,6 +91,13 @@ class KitchenScreenState extends State<KitchenScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 16),
+                            Text('테이블 ${order.tableNum}',
+                              style:  TextStyle(
+                                fontWeight: FontWeight.w500, color: const Color(0xFF777777),
+                                decoration: isChecked ? TextDecoration.lineThrough : null,
+                                  decorationColor: const Color(0xFF777777)
+                              ),
+                            ),
                             Text(
                               '${orderItem.menuName}, ${orderItem.quantity}개',
                               style: TextStyle(
