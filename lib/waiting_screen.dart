@@ -32,15 +32,15 @@ class WaitingScreenState extends State<WaitingScreen> with AutomaticKeepAliveCli
     _fetchOrders();
     _startPolling();
   }
-
+// 타이머 취소해서 불필요한 리소스 사용 방지
   @override
   void dispose() {
     _timer?.cancel();
     super.dispose();
   }
-
+// 주기적인 폴링으로 실시간 호출
   void _startPolling() {
-    _timer = Timer.periodic(Duration(seconds: 10), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       _fetchOrders();
     });
   }

@@ -80,7 +80,6 @@ class ServingScreenState extends State<ServingScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
-                          //
                           children: [
                             Text(
                               order.orderNum,
