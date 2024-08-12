@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:menuboard_admin/auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'waiting_screen.dart';
@@ -29,6 +30,18 @@ Future main() async{
   );
 }
 
+// 테이블 리셋 토스트 팝업
+void toastExample() {
+  Fluttertoast.showToast(
+    msg: "새로고침 되었습니다.",
+    toastLength: Toast.LENGTH_SHORT,
+    gravity: ToastGravity.CENTER,
+    timeInSecForIosWeb: 1,
+    backgroundColor: Colors.grey,
+    textColor: Colors.white,
+    fontSize: 16.0,
+  );
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
