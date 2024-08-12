@@ -22,7 +22,7 @@ class AuthProvider with ChangeNotifier {
     try {
       Map<String, dynamic> requestBody = {
         "token": "",
-        "uid": "nKkGGMVohifocRcSG60O7rqiae13"
+        "uid": ""
       };
 
       AuthResponse response = await _menuNetwork.login(requestBody);
