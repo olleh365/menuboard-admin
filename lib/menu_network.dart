@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'grouped_tables_model.dart';
 import 'order_model.dart';
+import 'auth_response.dart';
 
 part 'menu_network.g.dart';
 
@@ -9,6 +10,10 @@ part 'menu_network.g.dart';
 abstract class MenuNetwork {
   factory MenuNetwork(Dio dio, {String baseUrl}) = _MenuNetwork;
 
+  @POST("/auth/admin/sign")
+  Future<AuthResponse> login(
+      @Body() Map<String, dynamic> body
+      );
 
   @GET("/orders")
   Future<OrderResponse> getOrders(

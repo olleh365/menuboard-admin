@@ -1,4 +1,4 @@
-package com.junwooh.menuboard_admin.menuboard_admin
+package com.softlunch.menuboardadmin
 
 import io.flutter.embedding.android.FlutterActivity
 
