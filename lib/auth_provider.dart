@@ -1,24 +1,47 @@
+import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'menu_network.dart';
+import 'auth_response.dart';
 
-class AuthProvider {
+class AuthProvider with ChangeNotifier {
+  String? _token;
+  String get token => _token ?? '';
+
   final Dio _dio = Dio();
-  String? _accessToken;
+  late final MenuNetwork _menuNetwork;
 
-  Future<void> login(String uid, String token) async {
-    final response = await _dio.post(
-      'https://apidev.pocmenu.com/menuboard/api/auth/admin/sign',
-      data: {
-        "uid": uid,
-        "token": token,
-      },
-    );
-    if (response.data['code'] == '00') {
-      _accessToken = response.data['data']['accessToken'];
-      _dio.options.headers['Authorization'] = 'Bearer $_accessToken';
-    } else {
-      throw Exception('Login failed: ${response.data['message']}');
+  AuthProvider() {
+    _menuNetwork = MenuNetwork(_dio);
+  }
+
+  Future<String> login() async {
+    if (_token != null && _token!.isNotEmpty) {
+      return _token!;
+    }
+
+    try {
+      Map<String, dynamic> requestBody = {
+        "token": "",
+        "uid": "nKkGGMVohifocRcSG60O7rqiae13"
+      };
+
+      AuthResponse response = await _menuNetwork.login(requestBody);
+      _token = response.accessToken;
+
+      // 로그인 성공 후 다른 API 호출 시 토큰 사용 가능
+      _dio.options.headers['Authorization'] = "Bearer $_token";
+
+      notifyListeners();
+      return _token!;
+    } catch (e) {
+      debugPrint('Error during login: $e');
+      rethrow;
     }
   }
 
-  Dio get dio => _dio;
+  void logout() {
+    _token = null;
+    _dio.options.headers.remove('Authorization');
+    notifyListeners();
+  }
 }

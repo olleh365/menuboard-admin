@@ -7,7 +7,6 @@ import 'menu_network.dart';
 import 'store_provider.dart';
 import 'package:dio/dio.dart';
 import 'order_model.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'refresh_provider.dart';
 
 
@@ -27,8 +26,9 @@ class WaitingScreenState extends State<WaitingScreen> with AutomaticKeepAliveCli
   @override
   void initState() {
     super.initState();
+    final storeState = Provider.of<StoreState>(context, listen: false);
     final dio = Dio();
-    dio.options.headers['Authorization'] = dotenv.env['API_AUTH_TOKEN'];
+    dio.options.headers['Authorization'] = storeState.token;
     _menuNetwork = MenuNetwork(dio);
     _fetchOrders();
     _startPolling();

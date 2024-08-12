@@ -24,13 +24,14 @@ class StatusScreenState extends State<StatusScreen> {
   @override
   void initState() {
     super.initState();
+    final storeState = Provider.of<StoreState>(context, listen: false);
     final dio = Dio();
-    dio.options.headers['Authorization'] = dotenv.env['API_AUTH_TOKEN'];
+    dio.options.headers['Authorization'] = storeState.token;
     _menuNetwork = MenuNetwork(dio);
-    _fetchOrderData();
+    _fetchOrders();
   }
 
-  Future<void> _fetchOrderData() async {
+  Future<void> _fetchOrders() async {
     try {
       final storeState = Provider.of<StoreState>(context, listen: false);
       TableResponse tableResponse = await _menuNetwork.getOrderGroups(
@@ -49,7 +50,7 @@ class StatusScreenState extends State<StatusScreen> {
     final refreshNotifier =
         Provider.of<RefreshNotifier>(context, listen: false);
     refreshNotifier.addListener(() {
-      Future.microtask(() => _fetchOrderData());
+      Future.microtask(() => _fetchOrders());
     });
   }
 

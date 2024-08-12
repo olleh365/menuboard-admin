@@ -27,8 +27,9 @@ class ServingScreenState extends State<ServingScreen> {
   @override
   void initState() {
     super.initState();
+    final storeState = Provider.of<StoreState>(context, listen: false);
     final dio = Dio();
-    dio.options.headers['Authorization'] = dotenv.env['API_AUTH_TOKEN'];
+    dio.options.headers['Authorization'] = storeState.token;
     _menuNetwork = MenuNetwork(dio);
     _fetchOrders();
   }
