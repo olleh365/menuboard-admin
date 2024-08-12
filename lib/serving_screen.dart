@@ -6,7 +6,6 @@ import 'menu_network.dart';
 import 'package:dio/dio.dart';
 import 'refresh_provider.dart';
 import 'store_provider.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 
 

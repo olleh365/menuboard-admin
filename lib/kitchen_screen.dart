@@ -4,7 +4,6 @@ import 'menu_network.dart';
 import 'package:dio/dio.dart';
 import 'order_model.dart';
 import 'store_provider.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'refresh_provider.dart';
 
 
