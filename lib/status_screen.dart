@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 import 'package:menuboard_admin/menu_network.dart';
 import 'package:menuboard_admin/store_provider.dart';
@@ -56,165 +57,167 @@ class StatusScreenState extends State<StatusScreen> {
   @override
   Widget build(BuildContext context) {
     // 테이블 영역 카드 UI
-    return GridView.builder(
+    return Padding(
       padding: const EdgeInsets.all(8.0),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      child: StaggeredGridView.countBuilder(
         crossAxisCount: 2,
-        // childAspectRatio: 1.9 / 0.46,
-      ),
-      // 테이블 수 설정
-      itemCount: 8,
-      itemBuilder: (context, index) {
-        final tableNumber = index + 1;
-        final orderGroup = _orderGroups.firstWhere(
-          (og) => og.tableNum == tableNumber,
-          orElse: () => OrderGroup(
-            orderGroupNum: -1,
-            tableNum: tableNumber,
-            totalOrderPrice: 0,
-            orders: [],
-          ),
-        );
-        final totalPrice = orderGroup.totalOrderPrice;
-        final orders = orderGroup.orders;
-        final otherQuantity = orders.length >= 4 ? orders.length - 3 : 0;
+        itemCount: 8,
 
-        return GestureDetector(
+        itemBuilder: (BuildContext context, int index) {
+          final tableNumber = index + 1;
+          final orderGroup = _orderGroups.firstWhere(
+            (og) => og.tableNum == tableNumber,
+            orElse: () => OrderGroup(
+              orderGroupNum: -1,
+              tableNum: tableNumber,
+              totalOrderPrice: 0,
+              orders: [],
+            ),
+          );
+          final totalPrice = orderGroup.totalOrderPrice;
+          final orders = orderGroup.orders;
+          final otherQuantity = orders.length >= 4 ? orders.length - 3 : 0;
+
+          return GestureDetector(
             onTap: () => tableDialog(context, orderGroup),
-            child: Card(
-              elevation: 0,
-              color: Colors.white,
-              child: SizedBox(
-                height: 152, // 수정 필요
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                        const SizedBox(height: 8),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: SizedBox(
+              height: 152, // 높이 조절이 안되고 있음
+              child: Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0)),
+                elevation: 0,
+                color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                '테이블 $tableNumber',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: orders.isEmpty
+                                      ? const Color(0xFF777777)
+                                      : const Color(0xFFFF662B),
+                                ),
+                              ),
+                            ],
+                          ),
+                          // 테이블 리셋 UI
+                          SizedBox(
+                              width: 71,
+                              height: 24,
+                              child: TextButton(
+                                  onPressed: () {
+                                    // 테이블 리셋 토스트 팝업
+                                    Fluttertoast.showToast(
+                                      msg: '테이블 $tableNumber이 리셋되었습니다',
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.grey,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0,
+                                    );
+                                  },
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: const Color(0xFFFF662B),
+                                    foregroundColor: Colors.white,
+                                    padding: EdgeInsets.zero,
+                                  ),
+                                  child: const Text(
+                                    '테이블 리셋',
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600),
+                                  )))
+                        ],
+                      ),
+                    ),
+                    // 각 테이블 영역 카드에 주문메뉴 3개까지만 리스팅
+                    const SizedBox(height: 8),
+                    ...orderGroup.orders.take(3).map((order) => Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    '테이블 $tableNumber',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700,
-                                      color: orders.isEmpty
-                                          ? const Color(0xFF777777)
-                                          : const Color(0xFFFF662B),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              // 테이블 리셋 UI
-                              SizedBox(
-                                  width: 71,
-                                  height: 24,
-                                  child: TextButton(
-                                      onPressed: () {
-                                        // 테이블 리셋 토스트 팝업
-                                        Fluttertoast.showToast(
-                                          msg: '테이블 $tableNumber이 리셋되었습니다',
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.grey,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0,
-                                        );
-                                      },
-                                      style: TextButton.styleFrom(
-                                        backgroundColor:
-                                            const Color(0xFFFF662B),
-                                        foregroundColor: Colors.white,
-                                        padding: EdgeInsets.zero,
-                                      ),
-                                      child: const Text(
-                                        '테이블 리셋',
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600),
-                                      )))
-                            ],
-                          ),
-                        ),
-                        // 각 테이블 영역 카드에 주문메뉴 3개까지만 리스팅
-                        const SizedBox(height: 8),
-                        ...orderGroup.orders.take(3).map((order) => Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        width: 155,
-                                        child: Text(
-                                          order.menuList
-                                              .map((menu) => menu.menuName)
-                                              .join(', '),
-                                          style: const TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.black),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  Text(
-                                    '${order.menuList.map((menu) => menu.quantity).reduce((a, b) => a + b)}개',
-                                    style: const TextStyle(
-                                        color: Color(0xFFAAAAAA),
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12),
-                                  ),
-                                ],
-                              ),
-                            )),
-                        const Spacer(),
-                        const Divider(
-                          color: Color(0xFFF5F5F5),
-                          height: 1,
-                          thickness: 1,
-                        ),
-                        // 각 테이블 영역 하단 영역UI(외 항목 및 총 금액)
-                        SizedBox(
-                          height: 38,
-                          child : Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      '외 $otherQuantity항목',
+                                  SizedBox(
+                                    width: 130,
+                                    child: Text(
+                                      order.menuList
+                                          .map((menu) => menu.menuName)
+                                          .join(', '),
                                       style: const TextStyle(
                                           fontSize: 12,
-                                          fontWeight: FontWeight.w500,
-                                          color: Color(0xFF777777)),
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    Text(
-                                      '${f.format(totalPrice)}원',
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ])
+                                  )
+                                ],
+                              ),
+                              Text(
+                                '${order.menuList.map((menu) => menu.quantity).reduce((a, b) => a + b)}개',
+                                style: const TextStyle(
+                                    color: Color(0xFFAAAAAA),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12),
+                              ),
+                            ],
                           ),
-                        ),
-                ],
+                        )),
+                    const Spacer(),
+                    const Divider(
+                      color: Color(0xFFF5F5F5),
+                      height: 1,
+                      thickness: 1,
+                    ),
+                    // 각 테이블 영역 하단 영역UI(외 항목 및 총 금액)
+                    SizedBox(
+                      height: 38,
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '외 $otherQuantity항목',
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xFF777777)),
+                                ),
+                                Text(
+                                  '${f.format(totalPrice)}원',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ])),
+                    ),
+                  ],
+                ),
               ),
-              )
-            ));
-      },
+            ),
+          );
+        },
+        staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
+        // 각 항목이 전체 열 너비를 사용하도록 하며, 주어진 높이만큼만 공간을 차지하도록 함
+        mainAxisSpacing: 0,
+        crossAxisSpacing: 0,
+      ),
     );
   }
 
