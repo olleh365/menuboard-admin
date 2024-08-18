@@ -21,12 +21,17 @@ class _MenuNetwork implements MenuNetwork {
   String? baseUrl;
 
   @override
-  Future<AuthResponse> login(Map<String, dynamic> body) async {
+  Future<AuthResponse> login(
+    String token,
+    String uid,
+  ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'token': token,
+      r'uid': uid,
+    };
     final _headers = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    _data.addAll(body);
+    const Map<String, dynamic>? _data = null;
     final _result = await _dio
         .fetch<Map<String, dynamic>>(_setStreamType<AuthResponse>(Options(
       method: 'POST',

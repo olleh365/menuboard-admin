@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:menuboard_admin/auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'waiting_screen.dart';
 import 'kitchen_screen.dart';

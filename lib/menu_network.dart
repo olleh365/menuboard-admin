@@ -12,7 +12,8 @@ abstract class MenuNetwork {
 
   @POST("/auth/admin/sign")
   Future<AuthResponse> login(
-      @Body() Map<String, dynamic> body
+      @Query("token") String token,
+      @Query("uid") String uid,
       );
 
   @GET("/orders")
