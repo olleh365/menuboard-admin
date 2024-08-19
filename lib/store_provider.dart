@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class StoreState extends ChangeNotifier {
   int _storeSeq = 16;
-  String _date = '20240812';
+  String _date = '20240819';
   final _token = 'Bearer ${dotenv.env['API_AUTH_TOKEN']}';
 
 

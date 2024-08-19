@@ -232,29 +232,33 @@ class WaitingScreenState extends State<WaitingScreen> with AutomaticKeepAliveCli
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 8),
-                                Text(
-                                  '${item.menuName}, ${item.quantity}개',
-                                  style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.black),
-                                ),
-                                Text(
-                                  item.selectedOptions.map((addItem) => addItem.menuOptionName).join(' / 추가 '),
-                                  style: const TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xFF777777),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    '${item.menuName}, ${item.quantity}개',
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.black),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                )
-                              ],
+                                  Text(
+                                    item.selectedOptions.map((addItem) => addItem.menuOptionName).join(' / 추가 '),
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xFF777777),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  )
+                                ],
+                              ),
                             ),
 
                             // 취소 버튼 UI

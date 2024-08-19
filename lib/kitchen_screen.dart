@@ -87,37 +87,41 @@ class KitchenScreenState extends State<KitchenScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 16),
-                            Text('테이블 ${order.tableNum}',
-                              style:  TextStyle(
-                                fontWeight: FontWeight.w500, color: const Color(0xFF777777),
-                                decoration: isChecked ? TextDecoration.lineThrough : null,
-                                  decorationColor: const Color(0xFF777777)
-                              ),
+                        Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 16),
+                                Text('테이블 ${order.tableNum}',
+                                  style:  TextStyle(
+                                      fontWeight: FontWeight.w500, color: const Color(0xFF777777),
+                                      decoration: isChecked ? TextDecoration.lineThrough : null,
+                                      decorationColor: const Color(0xFF777777)
+                                  ),
+                                ),
+                                Text(
+                                  '${orderItem.menuName}, ${orderItem.quantity}개',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: isChecked ? const Color(0xFF777777) : Colors.black,
+                                    decoration: isChecked ? TextDecoration.lineThrough : null,
+                                    decorationColor: const Color(0xFF777777),
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                                Text(
+                                  orderItem.selectedOptions.map((addItem) => addItem.menuOptionName).join(' 추가 / '),
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color(0xFF777777),
+                                  ),
+                                ),
+                                const SizedBox(height: 16)
+                              ],
                             ),
-                            Text(
-                              '${orderItem.menuName}, ${orderItem.quantity}개',
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: isChecked ? const Color(0xFF777777) : Colors.black,
-                                decoration: isChecked ? TextDecoration.lineThrough : null,
-                                decorationColor: const Color(0xFF777777),
-                              ),
-                            ),
-                            Text(
-                              orderItem.selectedOptions.map((addItem) => addItem.menuOptionName).join(' 추가 / '),
-                              style: const TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xFF777777),
-                              ),
-                            ),
-                            const SizedBox(height: 16)
-                          ],
                         ),
                         Checkbox(
                           value: isChecked,

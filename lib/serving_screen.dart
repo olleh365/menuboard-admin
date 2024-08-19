@@ -152,32 +152,36 @@ class ServingScreenState extends State<ServingScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 8),
-                              Text(
-                                '${item.menuName}, ${item.quantity}개',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black,
-                                  decoration: isChecked ? TextDecoration.lineThrough : null,
-                                ),
+                          Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    '${item.menuName}, ${item.quantity}개',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black,
+                                      decoration: isChecked ? TextDecoration.lineThrough : null,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                  Text(
+                                    item.selectedOptions.map((addItem) => addItem.menuOptionName).join(' 추가 / '),
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500,
+                                      color: const Color(0xFF777777),
+                                      decoration: isChecked ? TextDecoration.lineThrough : null,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  )
+                                ],
                               ),
-                              Text(
-                                item.selectedOptions.map((addItem) => addItem.menuOptionName).join(' 추가 / '),
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500,
-                                  color: const Color(0xFF777777),
-                                  decoration: isChecked ? TextDecoration.lineThrough : null,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              )
-                            ],
                           ),
                           Checkbox(
                             value: isChecked,

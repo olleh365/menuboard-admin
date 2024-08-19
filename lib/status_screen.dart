@@ -148,23 +148,24 @@ class StatusScreenState extends State<StatusScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    width: 130,
-                                    child: Text(
-                                      order.menuList
-                                          .map((menu) => menu.menuName)
-                                          .join(', '),
-                                      style: const TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.black),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  )
-                                ],
+                              Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        order.menuList
+                                            .map((menu) => menu.menuName)
+                                            .join(', '),
+                                        style: const TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
+
+                                    ],
+                                  ),
                               ),
                               Text(
                                 '${order.menuList.map((menu) => menu.quantity).reduce((a, b) => a + b)}개',
