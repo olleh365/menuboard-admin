@@ -1,32 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
+import 'store_controller.dart';
 import 'waiting_screen.dart';
 import 'kitchen_screen.dart';
 import 'serving_screen.dart';
 import 'status_screen.dart';
-import 'store_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:dio/dio.dart';
-import 'package:menuboard_admin/exam_order_provider.dart';
-import 'refresh_provider.dart';
 
 
 
 Future main() async{
   await dotenv.load(fileName: ".env");
-  // final dio = Dio();
-  // dio.options.headers['Authorization'] = dotenv.env['API_AUTH_TOKEN'];
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => StoreState()),
-        ChangeNotifierProvider(create: (_) => ExamOrderProvider()),
-        ChangeNotifierProvider(create: (_) => RefreshNotifier()),
-      ],
-      child: const MyApp(),
-    ),
-  );
-}
+
+  Get.put(StoreController());
+  Get.put(RefreshController());
+
+  runApp(const MyApp());
+  }
 
 
 class MyApp extends StatelessWidget {
@@ -35,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //헤더 부분 UI
-    return MaterialApp(
+    return GetMaterialApp(
       home: DefaultTabController(
         length: 4,
         child: Scaffold(
@@ -92,7 +82,7 @@ class MyApp extends StatelessWidget {
                   ),
                   child: TextButton(
                     onPressed:(){
-                      Provider.of<RefreshNotifier>(context, listen: false).refresh();
+                      Get.find<RefreshController>().refresh();
                     },
                     style: TextButton.styleFrom(
                       textStyle: const TextStyle(
