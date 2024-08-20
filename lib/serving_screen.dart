@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'order_model.dart';
 import 'menu_network.dart';
 import 'package:dio/dio.dart';
-import 'refresh_provider.dart';
 import 'store_provider.dart';
 
 
@@ -46,15 +45,6 @@ class ServingScreenState extends State<ServingScreen> {
     }
   }
 
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final refreshNotifier = Provider.of<RefreshNotifier>(context, listen: false);
-    refreshNotifier.addListener(() {
-      Future.microtask(() => _fetchOrders());
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,6 @@ import 'menu_network.dart';
 import 'package:dio/dio.dart';
 import 'order_model.dart';
 import 'store_provider.dart';
-import 'refresh_provider.dart';
 
 
 class KitchenScreen extends StatefulWidget {
@@ -41,26 +40,6 @@ class KitchenScreenState extends State<KitchenScreen> {
       debugPrint('Error fetching orders: $e');
     }
   }
-
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final refreshNotifier = Provider.of<RefreshNotifier>(context, listen: false);
-    refreshNotifier.addListener(() {
-      Future.microtask(() => _fetchOrders());
-    });
-  }
-
-  // void _updateOrderItem(int orderSeq) async {
-  //   try{
-  //     await _menuNetwork.updateMenu(orderSeq);
-  //     _fetchOrders();
-  //   } catch (e) {
-  //     debugPrint('Error updating Function: $e');
-  //   }
-  // }
-
 
   @override
   Widget build(BuildContext context) {

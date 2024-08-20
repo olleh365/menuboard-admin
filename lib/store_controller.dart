@@ -3,11 +3,19 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 
 class StoreController extends GetxController {
-  final token =  'Bearer ${dotenv.env['API_AUTH_TOKEN']}'.obs;
-  final storeSeq = 16.obs;
-  final date = DateTime.now().obs;
+  final token =  ''.obs;
+  final storeSeq = 0.obs;
+  final date = ''.obs;
 
-// Add any other necessary logic and properties for StoreState
+
+  // 초기화 작업
+  @override
+  void onInit() {
+    super.onInit();
+    token.value = 'Bearer ${dotenv.env['API_AUTH_TOKEN']}';
+    date.value = '20240820';
+    storeSeq.value = 16;
+  }
 }
 
 class RefreshController extends GetxController {
