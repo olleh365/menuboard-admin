@@ -6,6 +6,7 @@ import 'package:menuboard_admin/store_provider.dart';
 import 'package:dio/dio.dart';
 import 'grouped_tables_model.dart';
 import 'package:provider/provider.dart';
+import 'refresh_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class StatusScreen extends StatefulWidget {
@@ -41,6 +42,16 @@ class StatusScreenState extends State<StatusScreen> {
     } catch (e) {
       debugPrint('Error fetching orders: $e');
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final refreshNotifier =
+        Provider.of<RefreshNotifier>(context, listen: false);
+    refreshNotifier.addListener(() {
+      Future.microtask(() => _fetchOrders());
+    });
   }
 
   @override
