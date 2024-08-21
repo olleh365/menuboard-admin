@@ -100,8 +100,8 @@ class MyApp extends StatelessWidget {
               ),
             ],
           ),
-          body: TabBarView(
-              physics: const NeverScrollableScrollPhysics(),
+          body: const TabBarView(
+              physics: NeverScrollableScrollPhysics(),
               children: [
                 WaitingScreen(),
                 KitchenScreen(),

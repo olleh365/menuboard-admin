@@ -3,12 +3,12 @@ import 'package:get/get.dart';
 import 'package:menuboard_admin/controllers/waiting_screen_controller.dart';
 import 'package:intl/intl.dart';
 
-class WaitingScreen extends GetView<WaitingScreenController> {
+class WaitingScreen extends StatelessWidget {
   const WaitingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Get.put(WaitingScreenController());
+    final WaitingScreenController controller = Get.put(WaitingScreenController());
     return Obx(() {
       return ListView.builder(
         itemCount: controller.orders.length,

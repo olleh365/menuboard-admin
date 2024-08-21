@@ -5,16 +5,15 @@ import '../services/menu_network.dart';
 import '../models/order_model.dart';
 import 'store_controller.dart';
 
-class WaitingScreenController extends GetxController {
+class KitchenScreenController extends GetxController {
   var orders = <Order>[].obs;
   var orderItems = <Menu>[].obs;
+  var checkedItems = <int, bool>{}.obs;
   late MenuNetwork _menuNetwork;
   final StoreController storeState = Get.put(StoreController());
   Timer? _timer;
 
-  List<Menu> getMenuItem(int orderIndex) {
-    return orders[orderIndex].menuList;
-  }
+
 
   @override
   void onInit() {
@@ -26,11 +25,6 @@ class WaitingScreenController extends GetxController {
     startPolling();
   }
 
-  @override
-  void onClose() {
-    _timer?.cancel();
-    super.onClose();
-  }
 
   // 주기적인 폴링으로 실시간 호출
   void startPolling() {
@@ -42,8 +36,10 @@ class WaitingScreenController extends GetxController {
 
   Future<void> fetchOrders() async {
     try {
-      OrderResponse response = await _menuNetwork.getOrders(storeState.storeSeq.value, storeState.date.value);
-      orders.value = response.data.where((order) => order.orderStatus == 'WAIT').toList();
+      OrderResponse response = await _menuNetwork.getOrders(
+          storeState.storeSeq.value, storeState.date.value);
+      orders.value =
+          response.data.where((order) => order.orderStatus == 'WAIT').toList();
     } catch (e) {
       Get.snackbar('Error', 'Failed to load orders: $e',
           snackPosition: SnackPosition.BOTTOM);
@@ -53,21 +49,22 @@ class WaitingScreenController extends GetxController {
   void updateOrderItem(int orderSeq) async {
     try {
       await _menuNetwork.updateMenu(orderSeq);
-      fetchOrders(); // 업데이트 후 주문 목록 갱신
+      fetchOrders();
     } catch (e) {
       Get.snackbar('Error', 'Failed to update order: $e',
           snackPosition: SnackPosition.BOTTOM);
     }
   }
 
-  // 주문 항목 취소
-  void cancelOrderItem(int orderSeq, int orderMenuSeq) async {
-    try {
-      await _menuNetwork.deleteMenu(orderSeq, orderMenuSeq);
-      fetchOrders();
-    } catch (e) {
-      Get.snackbar('Error', 'Failed to cancel order: $e',
-          snackPosition: SnackPosition.BOTTOM);
-    }
+  void menuCheckbox(int index, bool value) {
+    checkedItems[index] = value;
+    checkedItems.refresh();
+  }
+
+
+  @override
+  void onClose() {
+    _timer?.cancel();
+    super.onClose();
   }
 }
