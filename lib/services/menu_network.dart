@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
-import 'grouped_tables_model.dart';
-import 'order_model.dart';
-import 'auth_response.dart';
+import 'package:menuboard_admin/models/grouped_tables_model.dart';
+import 'package:menuboard_admin/models/order_model.dart';
+import '../auth_response.dart';
 
 part 'menu_network.g.dart';
 

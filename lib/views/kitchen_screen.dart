@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'menu_network.dart';
+import '../services/menu_network.dart';
 import 'package:dio/dio.dart';
-import 'order_model.dart';
-import 'store_provider.dart';
+import '../models/order_model.dart';
+import '../store_provider.dart';
 
 
 class KitchenScreen extends StatefulWidget {

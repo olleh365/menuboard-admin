@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'store_controller.dart';
-import 'waiting_screen.dart';
-import 'kitchen_screen.dart';
-import 'serving_screen.dart';
-import 'status_screen.dart';
+import 'controllers/store_controller.dart';
+import 'views/waiting_screen.dart';
+import 'views/kitchen_screen.dart';
+import 'views/serving_screen.dart';
+import 'views/status_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'menu_network.dart';
+import 'services/menu_network.dart';
 import 'package:dio/dio.dart';
 
 

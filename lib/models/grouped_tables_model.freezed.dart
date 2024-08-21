@@ -22,8 +22,12 @@ TableResponse _$TableResponseFromJson(Map<String, dynamic> json) {
 mixin _$TableResponse {
   List<OrderGroup> get data => throw _privateConstructorUsedError;
 
+  /// Serializes this TableResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TableResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $TableResponseCopyWith<TableResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -47,6 +51,8 @@ class _$TableResponseCopyWithImpl<$Res, $Val extends TableResponse>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of TableResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -80,6 +86,8 @@ class __$$TableResponseImplCopyWithImpl<$Res>
       _$TableResponseImpl _value, $Res Function(_$TableResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TableResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -123,12 +131,14 @@ class _$TableResponseImpl implements _TableResponse {
             const DeepCollectionEquality().equals(other._data, _data));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_data));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TableResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$TableResponseImplCopyWith<_$TableResponseImpl> get copyWith =>
@@ -151,8 +161,11 @@ abstract class _TableResponse implements TableResponse {
 
   @override
   List<OrderGroup> get data;
+
+  /// Create a copy of TableResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TableResponseImplCopyWith<_$TableResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -168,8 +181,12 @@ mixin _$OrderGroup {
   int get totalOrderPrice => throw _privateConstructorUsedError;
   List<Order> get orders => throw _privateConstructorUsedError;
 
+  /// Serializes this OrderGroup to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of OrderGroup
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $OrderGroupCopyWith<OrderGroup> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -197,6 +214,8 @@ class _$OrderGroupCopyWithImpl<$Res, $Val extends OrderGroup>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of OrderGroup
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -249,6 +268,8 @@ class __$$OrderGroupImplCopyWithImpl<$Res>
       _$OrderGroupImpl _value, $Res Function(_$OrderGroupImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of OrderGroup
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -324,12 +345,14 @@ class _$OrderGroupImpl implements _OrderGroup {
             const DeepCollectionEquality().equals(other._orders, _orders));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, orderGroupNum, tableNum,
       totalOrderPrice, const DeepCollectionEquality().hash(_orders));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of OrderGroup
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$OrderGroupImplCopyWith<_$OrderGroupImpl> get copyWith =>
@@ -361,8 +384,11 @@ abstract class _OrderGroup implements OrderGroup {
   int get totalOrderPrice;
   @override
   List<Order> get orders;
+
+  /// Create a copy of OrderGroup
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$OrderGroupImplCopyWith<_$OrderGroupImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -386,8 +412,12 @@ mixin _$Order {
   int get orderGroupNum => throw _privateConstructorUsedError;
   List<Menu> get menuList => throw _privateConstructorUsedError;
 
+  /// Serializes this Order to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Order
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $OrderCopyWith<Order> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -421,6 +451,8 @@ class _$OrderCopyWithImpl<$Res, $Val extends Order>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Order
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -520,6 +552,8 @@ class __$$OrderImplCopyWithImpl<$Res>
       _$OrderImpl _value, $Res Function(_$OrderImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Order
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -676,7 +710,7 @@ class _$OrderImpl implements _Order {
             const DeepCollectionEquality().equals(other._menuList, _menuList));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -693,7 +727,9 @@ class _$OrderImpl implements _Order {
       orderGroupNum,
       const DeepCollectionEquality().hash(_menuList));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Order
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$OrderImplCopyWith<_$OrderImpl> get copyWith =>
@@ -748,8 +784,11 @@ abstract class _Order implements Order {
   int get orderGroupNum;
   @override
   List<Menu> get menuList;
+
+  /// Create a copy of Order
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$OrderImplCopyWith<_$OrderImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -769,8 +808,12 @@ mixin _$Menu {
   int get menuTotalOriginalPrice => throw _privateConstructorUsedError;
   List<Option> get selectedOptions => throw _privateConstructorUsedError;
 
+  /// Serializes this Menu to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Menu
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $MenuCopyWith<Menu> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -800,6 +843,8 @@ class _$MenuCopyWithImpl<$Res, $Val extends Menu>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Menu
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -874,6 +919,8 @@ class __$$MenuImplCopyWithImpl<$Res>
   __$$MenuImplCopyWithImpl(_$MenuImpl _value, $Res Function(_$MenuImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Menu
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -989,7 +1036,7 @@ class _$MenuImpl implements _Menu {
                 .equals(other._selectedOptions, _selectedOptions));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -1002,7 +1049,9 @@ class _$MenuImpl implements _Menu {
       menuTotalOriginalPrice,
       const DeepCollectionEquality().hash(_selectedOptions));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Menu
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MenuImplCopyWith<_$MenuImpl> get copyWith =>
@@ -1045,8 +1094,11 @@ abstract class _Menu implements Menu {
   int get menuTotalOriginalPrice;
   @override
   List<Option> get selectedOptions;
+
+  /// Create a copy of Menu
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MenuImplCopyWith<_$MenuImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1060,8 +1112,12 @@ mixin _$Option {
   int get menuOptionSeq => throw _privateConstructorUsedError;
   String get menuOptionName => throw _privateConstructorUsedError;
 
+  /// Serializes this Option to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Option
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $OptionCopyWith<Option> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -1083,6 +1139,8 @@ class _$OptionCopyWithImpl<$Res, $Val extends Option>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Option
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1120,6 +1178,8 @@ class __$$OptionImplCopyWithImpl<$Res>
       _$OptionImpl _value, $Res Function(_$OptionImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Option
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1168,11 +1228,13 @@ class _$OptionImpl implements _Option {
                 other.menuOptionName == menuOptionName));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, menuOptionSeq, menuOptionName);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Option
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$OptionImplCopyWith<_$OptionImpl> get copyWith =>
@@ -1197,8 +1259,11 @@ abstract class _Option implements Option {
   int get menuOptionSeq;
   @override
   String get menuOptionName;
+
+  /// Create a copy of Option
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$OptionImplCopyWith<_$OptionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

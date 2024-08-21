@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
-import 'package:menuboard_admin/menu_network.dart';
+import 'package:menuboard_admin/services/menu_network.dart';
 import 'package:menuboard_admin/store_provider.dart';
 import 'package:dio/dio.dart';
-import 'grouped_tables_model.dart';
+import 'package:menuboard_admin/models/grouped_tables_model.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
