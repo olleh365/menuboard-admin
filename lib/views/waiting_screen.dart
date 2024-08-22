@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:menuboard_admin/controllers/waiting_screen_controller.dart';
 import 'package:intl/intl.dart';
 
-class WaitingScreen extends StatelessWidget {
+class WaitingScreen extends GetView<WaitingScreenController> {
   const WaitingScreen({super.key});
 
   @override

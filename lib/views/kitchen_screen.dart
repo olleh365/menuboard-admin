@@ -2,26 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:menuboard_admin/controllers/kitchen_screen_controller.dart';
 
+class KitchenScreen extends StatelessWidget {
+  final KitchenScreenController controller = Get.put(KitchenScreenController());
 
-class KitchenScreen extends StatelessWidget{
-  const KitchenScreen({super.key});
-
+  KitchenScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final KitchenScreenController controller = Get.put(KitchenScreenController());
-
-    // 승인된 주문메뉴 리스트
-    return Obx((){
-      // 각 오더의 주문 목록 호출 (orderItems 리스트 변수에 Order.items 리스트를 결합하여 저장함)
-      final orderItems = controller.orders.expand((order) => order.menuList).toList();
+    return Obx(() {
+      final orderItems = controller.order.expand((order) => order.menuList).toList();
 
       return ListView.builder(
         itemCount: orderItems.length,
         itemBuilder: (context, index) {
           final orderItem = orderItems[index];
-          final order = controller.orders.firstWhere((order) => order.menuList.contains(orderItem));
+          final order = controller.order.firstWhere((order) => order.menuList.contains(orderItem));
           final isChecked = controller.checkedItems[index] ?? false;
+
           return Column(
             children: [
               if (index == 0) const SizedBox(height: 8),
@@ -39,12 +36,13 @@ class KitchenScreen extends StatelessWidget{
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const SizedBox(height: 16),
-                                Text('테이블 ${order.tableNum}',
-                                  style:  TextStyle(
-                                      fontWeight: FontWeight.w500, color: const Color(0xFF777777),
+                                Text(
+                                  '테이블 ${order.tableNum}',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: const Color(0xFF777777),
                                       decoration: isChecked ? TextDecoration.lineThrough : null,
-                                      decorationColor: const Color(0xFF777777)
-                                  ),
+                                      decorationColor: const Color(0xFF777777)),
                                 ),
                                 Text(
                                   '${orderItem.menuName}, ${orderItem.quantity}개',
@@ -66,17 +64,14 @@ class KitchenScreen extends StatelessWidget{
                                     color: Color(0xFF777777),
                                   ),
                                 ),
-                                const SizedBox(height: 16)
+                                const SizedBox(height: 16),
                               ],
                             ),
                           ),
                           Checkbox(
                             value: isChecked,
                             onChanged: (bool? value) {
-                              if (value != null) {
-                                controller.menuCheckbox(index, value);
-                                controller.checkedItems.refresh();
-                              }
+                              controller.menuCheckbox(index, value ?? false);
                             },
                             activeColor: const Color(0xFFAAAAAA),
                             side: const BorderSide(
@@ -87,8 +82,7 @@ class KitchenScreen extends StatelessWidget{
                         ],
                       ),
                     ),
-                    const Divider(
-                        height: 1, thickness: 1, color: Color(0xFFDFDFDF))
+                    const Divider(height: 1, thickness: 1, color: Color(0xFFDFDFDF)),
                   ],
                 ),
               ),

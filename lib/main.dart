@@ -8,7 +8,7 @@ import 'views/status_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'services/menu_network.dart';
 import 'package:dio/dio.dart';
-
+import 'package:menuboard_admin/controllers/kitchen_screen_controller.dart';
 
 
 
@@ -18,7 +18,6 @@ Future main() async{
   Get.put(StoreController());
   Get.put(MenuNetwork(Dio()));
   Get.put(RefreshController());
-
 
   runApp(const MyApp());
   }
@@ -100,11 +99,14 @@ class MyApp extends StatelessWidget {
               ),
             ],
           ),
-          body: const TabBarView(
+          body: TabBarView(
               physics: NeverScrollableScrollPhysics(),
               children: [
                 WaitingScreen(),
-                KitchenScreen(),
+                GetBuilder<KitchenScreenController>(
+                    init: KitchenScreenController(),
+                    builder: (_) => KitchenScreen(),
+                ),
                 ServingScreen(),
                 StatusScreen()
               ]),
