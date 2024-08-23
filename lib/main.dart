@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:menuboard_admin/controllers/waiting_screen_controller.dart';
 import 'controllers/store_controller.dart';
 import 'views/waiting_screen.dart';
 import 'views/kitchen_screen.dart';
@@ -102,7 +103,9 @@ class MyApp extends StatelessWidget {
           body: TabBarView(
               physics: NeverScrollableScrollPhysics(),
               children: [
-                WaitingScreen(),
+                GetBuilder<WaitingScreenController>(
+                    init: WaitingScreenController(),
+                    builder: (_) => const WaitingScreen()),
                 GetBuilder<KitchenScreenController>(
                     init: KitchenScreenController(),
                     builder: (_) => KitchenScreen(),
