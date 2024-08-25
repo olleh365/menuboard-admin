@@ -70,10 +70,10 @@ class ServingScreen extends StatelessWidget {
                                   onPressed: () {
                                     // 현재 인덱스에 해당하는 주문의 모든 항목의 체크 상태 업데이트, 엔트리 리스트로 부터 새로운 맵 생성함
                                     final allChecked = controller.checkedItems[index]
-                                        .values
+                                        ?.values
                                         .every((checked) => checked) ??
                                     false;
-                                    _checkedItems[index] = Map.fromEntries(
+                                    controller.checkedItems[index] = Map.fromEntries(
                                     order.menuList.map((item) => MapEntry(
                                     order.menuList.indexOf(item),
                                     !allChecked)),
@@ -99,7 +99,7 @@ class ServingScreen extends StatelessWidget {
                     // 승인된 주문 목록리스트 UI
                     ...order.menuList.map((item) {
                       final itemIndex = order.menuList.indexOf(item);
-                      final isChecked = _checkedItems[index]?[itemIndex] ?? false;
+                      final isChecked = controller.checkedItems[index]?[itemIndex] ?? false;
 
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -140,11 +140,9 @@ class ServingScreen extends StatelessWidget {
                             Checkbox(
                               value: isChecked,
                               onChanged: (bool? value) {
-                                setState(() {
-                                  _checkedItems[index] ??= {};
-                                  _checkedItems[index]![itemIndex] =
+                                  controller.checkedItems[index] ??= {};
+                                  controller.checkedItems[index]![itemIndex] =
                                       value ?? false;
-                                });
                               },
                               activeColor: const Color(0xFFFF662B),
                               side: const BorderSide(

@@ -8,14 +8,10 @@ import 'store_controller.dart';
 class ServingScreenController extends GetxController {
   var orders = <Order>[].obs;
   var orderItems = <Menu>[].obs;
-  var checkedItems = <Map<int, Map<int,bool>>>[].obs;
+  var checkedItems = <int, Map<int, bool>>{}.obs;
   late MenuNetwork _menuNetwork;
   final StoreController storeState = Get.put(StoreController());
   Timer? _timer;
-
-  List<Menu> getMenuItem(int orderIndex) {
-    return orders[orderIndex].menuList;
-  }
 
   @override
   void onInit() {

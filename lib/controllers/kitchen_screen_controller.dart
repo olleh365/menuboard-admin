@@ -7,7 +7,7 @@ import 'store_controller.dart';
 
 class KitchenScreenController extends GetxController {
   var order = <Order>[].obs;
-  var checkedItems = <bool>[].obs;
+  var checkedItems = <int ,bool>{}.obs;
   late MenuNetwork _menuNetwork;
   final StoreController storeState = Get.put(StoreController());
 
@@ -32,7 +32,6 @@ class KitchenScreenController extends GetxController {
           storeState.storeSeq.value, storeState.date.value);
       order.value =
           response.data.where((order) => order.orderStatus == 'ACCEPTED' || order.orderStatus == 'COOKED' || order.orderStatus == 'SERVED').toList();
-      checkedItems.value = List<bool>.filled(order.expand((order) => order.menuList).length, false);
 
     } catch (e) {
       Get.snackbar('Error', 'Failed to load orders: $e',
