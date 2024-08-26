@@ -47,3 +47,50 @@ abstract class MenuNetwork {
       );
 }
 
+class TokenInterceptor extends Interceptor {
+  final Dio dio;
+  final String Function() getToken;
+  final Future<void> Function() refreshToken;
+
+  TokenInterceptor({
+    required this.dio,
+    required this.getToken,
+    required this.refreshToken,
+  });
+
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    // 요청을 보내기 전에 토큰을 헤더에 추가
+    final token = getToken();
+    options.headers['Authorization'] = 'Bearer $token';
+    super.onRequest(options, handler);
+  }
+
+  @override
+  void onError(DioError err, ErrorInterceptorHandler handler) async {
+    if (err.response?.statusCode == 401) {
+      // 토큰이 만료된 경우 토큰 갱신을 시도
+      try {
+        await refreshToken();
+        final token = getToken();
+        final requestOptions = err.requestOptions;
+
+        // 갱신된 토큰으로 원래 요청을 재시도
+        final response = await dio.request(
+          requestOptions.path,
+          options: Options(
+            method: requestOptions.method,
+            headers: {'Authorization': 'Bearer $token'},
+          ),
+          data: requestOptions.data,
+          queryParameters: requestOptions.queryParameters,
+        );
+        return handler.resolve(response);
+      } catch (e) {
+        // 토큰 갱신 실패 시 로그아웃 처리 등을 여기에 추가 가능
+        return handler.reject(err);
+      }
+    }
+    super.onError(err, handler);
+  }
+}

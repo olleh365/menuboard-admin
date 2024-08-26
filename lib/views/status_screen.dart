@@ -1,160 +1,130 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:menuboard_admin/services/menu_network.dart';
-import 'package:menuboard_admin/store_provider.dart';
-import 'package:dio/dio.dart';
-import 'package:menuboard_admin/models/grouped_tables_model.dart';
-import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:menuboard_admin/controllers/status_screen_controller.dart';
 
-class StatusScreen extends StatefulWidget {
-  const StatusScreen({super.key});
+import '../models/grouped_tables_model.dart';
 
-  @override
-  StatusScreenState createState() => StatusScreenState();
-}
+class StatusScreen extends StatelessWidget {
+  StatusScreen({super.key});
+  final StatusScreenController controller = Get.put(StatusScreenController());
 
-class StatusScreenState extends State<StatusScreen> {
-  var f = NumberFormat('###,###,###,###');
-  late final MenuNetwork _menuNetwork;
-  List<OrderGroup> _orderGroups = [];
-
-  @override
-  void initState() {
-    super.initState();
-    final storeState = Provider.of<StoreState>(context, listen: false);
-    final dio = Dio();
-    dio.options.headers['Authorization'] = storeState.token;
-    _menuNetwork = MenuNetwork(dio);
-    _fetchOrders();
-  }
-
-  Future<void> _fetchOrders() async {
-    try {
-      final storeState = Provider.of<StoreState>(context, listen: false);
-      TableResponse tableResponse = await _menuNetwork.getOrderGroups(
-          storeState.storeSeq, storeState.date);
-      setState(() {
-        _orderGroups = tableResponse.data;
-      });
-    } catch (e) {
-      debugPrint('Error fetching orders: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     // 테이블 영역 카드 UI
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: StaggeredGridView.countBuilder(
-        crossAxisCount: 2,
-        itemCount: 8,
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+          child:  StaggeredGridView.countBuilder(
+            crossAxisCount: 2,
+            itemCount: 8,
 
-        itemBuilder: (BuildContext context, int index) {
-          final tableNumber = index + 1;
-          final orderGroup = _orderGroups.firstWhere(
-            (og) => og.tableNum == tableNumber,
-            orElse: () => OrderGroup(
-              orderGroupNum: -1,
-              tableNum: tableNumber,
-              totalOrderPrice: 0,
-              orders: [],
-            ),
-          );
-          final totalPrice = orderGroup.totalOrderPrice;
-          final orders = orderGroup.orders;
-          final otherQuantity = orders.length >= 4 ? orders.length - 3 : 0;
+            itemBuilder: (BuildContext context, int index) {
+              final tableNumber = index + 1;
+              final orderGroup = controller.orderGroups.firstWhere(
+                    (og) => og.tableNum == tableNumber,
+                orElse: () => OrderGroup(
+                  orderGroupNum: -1,
+                  tableNum: tableNumber,
+                  totalOrderPrice: 0,
+                  orders: [],
+                ),
+              );
+              final totalPrice = orderGroup.totalOrderPrice;
+              final orders = orderGroup.orders;
+              final otherQuantity = orders.length >= 4 ? orders.length - 3 : 0;
+              var f = NumberFormat('###,###,###,###');
 
-          return GestureDetector(
-            onTap: () => tableDialog(context, orderGroup),
-            child: SizedBox(
-              height: 152, // 높이 조절이 안되고 있음
-              child: Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0)),
-                elevation: 0,
-                color: Colors.white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 8),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
+              return GestureDetector(
+                onTap: () => tableDialog(context, orderGroup),
+                child: SizedBox(
+                  height: 152, // 높이 조절이 안되고 있음
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0)),
+                    elevation: 0,
+                    color: Colors.white,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 8),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                '테이블 $tableNumber',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: orders.isEmpty
-                                      ? const Color(0xFF777777)
-                                      : const Color(0xFFFF662B),
-                                ),
+                              Row(
+                                children: [
+                                  Text(
+                                    '테이블 $tableNumber',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                      color: orders.isEmpty
+                                          ? const Color(0xFF777777)
+                                          : const Color(0xFFFF662B),
+                                    ),
+                                  ),
+                                ],
                               ),
+                              // 테이블 리셋 UI
+                              SizedBox(
+                                  width: 71,
+                                  height: 24,
+                                  child: TextButton(
+                                      onPressed: () {
+                                        // 테이블 리셋 토스트 팝업
+                                        Fluttertoast.showToast(
+                                          msg: '테이블 $tableNumber이 리셋되었습니다',
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.grey,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0,
+                                        );
+                                      },
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: const Color(0xFFFF662B),
+                                        foregroundColor: Colors.white,
+                                        padding: EdgeInsets.zero,
+                                      ),
+                                      child: const Text(
+                                        '테이블 리셋',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600),
+                                      )))
                             ],
                           ),
-                          // 테이블 리셋 UI
-                          SizedBox(
-                              width: 71,
-                              height: 24,
-                              child: TextButton(
-                                  onPressed: () {
-                                    // 테이블 리셋 토스트 팝업
-                                    Fluttertoast.showToast(
-                                      msg: '테이블 $tableNumber이 리셋되었습니다',
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      timeInSecForIosWeb: 1,
-                                      backgroundColor: Colors.grey,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0,
-                                    );
-                                  },
-                                  style: TextButton.styleFrom(
-                                    backgroundColor: const Color(0xFFFF662B),
-                                    foregroundColor: Colors.white,
-                                    padding: EdgeInsets.zero,
-                                  ),
-                                  child: const Text(
-                                    '테이블 리셋',
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600),
-                                  )))
-                        ],
-                      ),
-                    ),
-                    // 각 테이블 영역 카드에 주문메뉴 3개까지만 리스팅
-                    const SizedBox(height: 8),
-                    ...orderGroup.orders.take(3).map((order) => Padding(
+                        ),
+                        // 각 테이블 영역 카드에 주문메뉴 3개까지만 리스팅
+                        const SizedBox(height: 8),
+                        ...orderGroup.orders.take(3).map((order) => Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        order.menuList
-                                            .map((menu) => menu.menuName)
-                                            .join(', '),
-                                        style: const TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.black),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                      ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      order.menuList
+                                          .map((menu) => menu.menuName)
+                                          .join(', '),
+                                      style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
 
-                                    ],
-                                  ),
+                                  ],
+                                ),
                               ),
                               Text(
                                 '${order.menuList.map((menu) => menu.quantity).reduce((a, b) => a + b)}개',
@@ -166,53 +136,54 @@ class StatusScreenState extends State<StatusScreen> {
                             ],
                           ),
                         )),
-                    const Spacer(),
-                    const Divider(
-                      color: Color(0xFFF5F5F5),
-                      height: 1,
-                      thickness: 1,
+                        const Spacer(),
+                        const Divider(
+                          color: Color(0xFFF5F5F5),
+                          height: 1,
+                          thickness: 1,
+                        ),
+                        // 각 테이블 영역 하단 영역UI(외 항목 및 총 금액)
+                        SizedBox(
+                          height: 38,
+                          child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8),
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '외 $otherQuantity항목',
+                                      style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          color: Color(0xFF777777)),
+                                    ),
+                                    Text(
+                                      '${f.format(totalPrice)}원',
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ])),
+                        ),
+                      ],
                     ),
-                    // 각 테이블 영역 하단 영역UI(외 항목 및 총 금액)
-                    SizedBox(
-                      height: 38,
-                      child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '외 $otherQuantity항목',
-                                  style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xFF777777)),
-                                ),
-                                Text(
-                                  '${f.format(totalPrice)}원',
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ])),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          );
-        },
-        staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
-        // 각 항목이 전체 열 너비를 사용하도록 하며, 주어진 높이만큼만 공간을 차지하도록 함
-        mainAxisSpacing: 0,
-        crossAxisSpacing: 0,
-      ),
-    );
+              );
+            },
+            staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
+            // 각 항목이 전체 열 너비를 사용하도록 하며, 주어진 높이만큼만 공간을 차지하도록 함
+            mainAxisSpacing: 0,
+            crossAxisSpacing: 0,
+          ),
+      );
   }
 
 // 테이블 팝업 화면 UI
   void tableDialog(BuildContext context, OrderGroup orderGroup) {
+    var f = NumberFormat('###,###,###,###');
     showDialog(
         context: context,
         builder: (context) {

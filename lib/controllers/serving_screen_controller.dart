@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
-import '../services/menu_network.dart';
-import '../models/order_model.dart';
+import 'package:menuboard_admin/services/menu_network.dart';
+import 'package:menuboard_admin/models/order_model.dart';
 import 'store_controller.dart';
 
 class ServingScreenController extends GetxController {
@@ -40,7 +40,7 @@ class ServingScreenController extends GetxController {
   Future<void> fetchOrders() async {
     try {
       OrderResponse response = await _menuNetwork.getOrders(storeState.storeSeq.value, storeState.date.value);
-      response.data.where((order) => order.orderStatus == 'ACCEPTED' || order.orderStatus == 'COOKED' || order.orderStatus == 'SERVED').toList();
+      orders.value = response.data.where((order) => order.orderStatus == 'ACCEPTED' || order.orderStatus == 'COOKED' || order.orderStatus == 'SERVED').toList();
     } catch (e) {
       Get.snackbar('Error', 'Failed to load orders: $e',
           snackPosition: SnackPosition.BOTTOM);

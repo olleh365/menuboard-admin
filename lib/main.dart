@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:menuboard_admin/controllers/serving_screen_controller.dart';
 import 'package:menuboard_admin/controllers/waiting_screen_controller.dart';
 import 'controllers/store_controller.dart';
 import 'views/waiting_screen.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'services/menu_network.dart';
 import 'package:dio/dio.dart';
 import 'package:menuboard_admin/controllers/kitchen_screen_controller.dart';
+import 'package:menuboard_admin/controllers/status_screen_controller.dart';
 
 
 
@@ -110,8 +112,14 @@ class MyApp extends StatelessWidget {
                     init: KitchenScreenController(),
                     builder: (_) => KitchenScreen(),
                 ),
-                ServingScreen(),
-                StatusScreen()
+                GetBuilder<ServingScreenController>(
+                    init: ServingScreenController(),
+                    builder: (_) => ServingScreen(),
+                ),
+                GetBuilder<StatusScreenController>(
+                  init: StatusScreenController(),
+                  builder: (_) => StatusScreen(),
+                ),
               ]),
         ),
       ),

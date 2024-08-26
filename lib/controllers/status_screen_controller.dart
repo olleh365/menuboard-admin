@@ -2,16 +2,14 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 import '../services/menu_network.dart';
-import '../models/order_model.dart';
+import 'package:menuboard_admin/models/grouped_tables_model.dart';
 import 'store_controller.dart';
 
-class KitchenScreenController extends GetxController {
-  var order = <Order>[].obs;
-  var orderItems = <Menu>[].obs;
-  var checkedItems = <int ,bool>{}.obs;
+class StatusScreenController extends GetxController {
+  var orderGroups = <OrderGroup>[].obs;
   late MenuNetwork _menuNetwork;
   final StoreController storeState = Get.put(StoreController());
-
+  Timer? _timer;
 
 
   @override
@@ -21,19 +19,19 @@ class KitchenScreenController extends GetxController {
     dio.options.headers['Authorization'] = storeState.token;
     _menuNetwork = MenuNetwork(dio);
     fetchOrders();
-    ever(order, (_) {
-      fetchOrders();
-    });
-
   }
+
+  @override
+  void onClose() {
+    _timer?.cancel();
+    super.onClose();
+  }
+
 
   Future<void> fetchOrders() async {
     try {
-      OrderResponse response = await _menuNetwork.getOrders(
-          storeState.storeSeq.value, storeState.date.value);
-      order.value =
-          response.data.where((order) => order.orderStatus == 'ACCEPTED' || order.orderStatus == 'COOKED' || order.orderStatus == 'SERVED').toList();
-
+      TableResponse tableResponse = await _menuNetwork.getOrderGroups(storeState.storeSeq.value, storeState.date.value);
+      orderGroups.value = tableResponse.data;
     } catch (e) {
       Get.snackbar('Error', 'Failed to load orders: $e',
           snackPosition: SnackPosition.BOTTOM);
@@ -43,15 +41,14 @@ class KitchenScreenController extends GetxController {
   void updateOrderItem(int orderSeq) async {
     try {
       await _menuNetwork.updateMenu(orderSeq);
-      fetchOrders();
+      fetchOrders(); // 업데이트 후 주문 목록 갱신
     } catch (e) {
       Get.snackbar('Error', 'Failed to update order: $e',
           snackPosition: SnackPosition.BOTTOM);
     }
   }
 
-  void menuCheckbox(int index, bool value) {
-    checkedItems[index] = value;
+  void refreshOrders() {
+    fetchOrders();
   }
-
 }
