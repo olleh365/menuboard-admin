@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:menuboard_admin/controllers/status_screen_controller.dart';
 
 import '../models/grouped_tables_model.dart';
@@ -75,16 +74,7 @@ class StatusScreen extends StatelessWidget {
                                   height: 24,
                                   child: TextButton(
                                       onPressed: () {
-                                        // 테이블 리셋 토스트 팝업
-                                        Fluttertoast.showToast(
-                                          msg: '테이블 $tableNumber이 리셋되었습니다',
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.grey,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0,
-                                        );
+                                        controller.resetTable(tableNumber);
                                       },
                                       style: TextButton.styleFrom(
                                         backgroundColor: const Color(0xFFFF662B),

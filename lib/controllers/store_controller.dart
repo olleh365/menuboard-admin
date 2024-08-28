@@ -13,7 +13,7 @@ class StoreController extends GetxController {
   void onInit() {
     super.onInit();
     token.value = 'Bearer ${dotenv.env['API_AUTH_TOKEN']}';
-    date.value = '20240823';
+    date.value = '20240828';
     storeSeq.value = 16;
   }
 }

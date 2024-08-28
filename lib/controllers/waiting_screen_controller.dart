@@ -1,13 +1,15 @@
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
+import 'package:get/get_rx/get_rx.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import '../services/menu_network.dart';
 import '../models/order_model.dart';
 import 'store_controller.dart';
 
 class WaitingScreenController extends GetxController {
-  var orders = <Order>[].obs;
-  var orderItems = <Menu>[].obs;
+  RxList orders = <Order>[].obs;
+  RxList orderItems = <Menu>[].obs;
   late MenuNetwork _menuNetwork;
   final StoreController storeState = Get.put(StoreController());
   Timer? _timer;
@@ -69,5 +71,9 @@ class WaitingScreenController extends GetxController {
       Get.snackbar('Error', 'Failed to cancel order: $e',
           snackPosition: SnackPosition.BOTTOM);
     }
+  }
+
+  void refreshOrders() {
+    fetchOrders();
   }
 }

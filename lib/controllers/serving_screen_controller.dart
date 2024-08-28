@@ -21,6 +21,9 @@ class ServingScreenController extends GetxController {
     _menuNetwork = MenuNetwork(dio);
     fetchOrders();
     startPolling();
+    ever(orders, (_) {
+      fetchOrders();
+    });
   }
 
   @override

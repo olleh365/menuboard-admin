@@ -20,7 +20,8 @@ Future main() async{
 
   Get.put(StoreController());
   Get.put(MenuNetwork(Dio()));
-  Get.put(RefreshController());
+  Get.put(WaitingScreenController());
+  Get.put(StatusScreenController());
 
   runApp(const MyApp());
   }
@@ -89,7 +90,8 @@ class MyApp extends StatelessWidget {
                   ),
                   child: TextButton(
                     onPressed:(){
-                      Get.find<RefreshController>().refresh();
+                      Get.find<StatusScreenController>().refreshOrders();
+                      Get.find<StatusScreenController>().refreshOrders();
                     },
                     style: TextButton.styleFrom(
                       textStyle: const TextStyle(
@@ -103,7 +105,7 @@ class MyApp extends StatelessWidget {
             ],
           ),
           body: TabBarView(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               children: [
                 GetBuilder<WaitingScreenController>(
                     init: WaitingScreenController(),

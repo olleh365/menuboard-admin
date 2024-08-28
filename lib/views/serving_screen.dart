@@ -6,10 +6,9 @@ import 'package:menuboard_admin/controllers/serving_screen_controller.dart';
 
 
 class ServingScreen extends StatelessWidget {
-  ServingScreen({super.key});
-
   final ServingScreenController controller = Get.put(ServingScreenController());
 
+  ServingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

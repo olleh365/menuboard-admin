@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
+import 'package:get/get_rx/get_rx.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/state_manager.dart';
 import '../services/menu_network.dart';
 import '../models/order_model.dart';
 import 'store_controller.dart';
 
 class KitchenScreenController extends GetxController {
-  var order = <Order>[].obs;
-  var orderItems = <Menu>[].obs;
-  var checkedItems = <int ,bool>{}.obs;
+  RxList order = <Order>[].obs;
+  RxList orderItems = <Menu>[].obs;
+  RxMap checkedItems = <int ,bool>{}.obs;
   late MenuNetwork _menuNetwork;
   final StoreController storeState = Get.put(StoreController());
 
@@ -21,6 +24,7 @@ class KitchenScreenController extends GetxController {
     dio.options.headers['Authorization'] = storeState.token;
     _menuNetwork = MenuNetwork(dio);
     fetchOrders();
+    // 체크박스 시 즉시 갱신 완료
     ever(order, (_) {
       fetchOrders();
     });
